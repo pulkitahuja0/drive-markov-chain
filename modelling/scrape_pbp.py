@@ -12,8 +12,6 @@ pbp = nfl.load_pbp([year]).filter(~pl.col("play_type").is_in(["no_play", "kickof
 
 data = defaultdict(lambda: defaultdict(int))
 
-grouped = pbp.group_by(["game_id", "drive"], maintain_order=True)
-
 for drive_df in pbp.partition_by(["game_id", "drive"], maintain_order=True):
     if drive_df.select(pl.col("play_type").is_in(["qb_kneel"]).any()).item():
         continue
@@ -50,12 +48,7 @@ filepath = os.path.join("output", file_name)
 
 os.makedirs("output", exist_ok=True)
 
-relative_frequencies = {
-    key: {k: v / sum(inner.values()) for k, v in inner.items()}
-    for key, inner in data.items()
-}
-
 with open(filepath, "w") as json_file:
-    json.dump(relative_frequencies, json_file)
+    json.dump(data, json_file)
 
 print(f"Dumped play by play data state transitions from the {year} season.")
