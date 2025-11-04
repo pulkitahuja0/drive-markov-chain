@@ -3,41 +3,72 @@ import json
 
 import numpy as np
 
-with open(os.path.join("output", "output_all.json"), "r") as json_file:
-    data = json.load(json_file)
+with open(os.path.join("output", "output_all_freq.json"), "r") as json_file:
+    transitions = json.load(json_file)
 
-states = list(data.keys())
-end_states = ["turnover", "touchdown", "punt", "made_fg", "bad_fg"]
-transient_states = [s for s in states if not s in end_states]
+all_states = set(transitions.keys())
+for nxt in transitions.values():
+    all_states |= nxt.keys()
+all_states = sorted(all_states)
 
-P = np.zeros((len(states) + len(end_states), len(states) + len(end_states)))
-all_states = states + end_states
-state_index = {s: i for i, s in enumerate(all_states)}
+absorbing = [s for s in all_states if s not in transitions or len(transitions[s]) == 0]
+transient = [s for s in all_states if s not in absorbing]
 
-for s, nexts in data.items():
-    i = state_index[s]
-    total = sum(nexts.values())
-    if total > 0:
-        for next_state, count in nexts.items():
-            j = state_index[next_state]
-            P[i, j] = count / total
-    else:
-        P[i, i] = 1.0
+# map states → matrix row/col
+idx = {s: i for i, s in enumerate(all_states)}
 
-t_idx = [state_index[s] for s in transient_states]
-e_idx = [state_index[s] for s in end_states]
+n = len(all_states)
+P = np.zeros((n, n))
 
-Q = P[np.ix_(t_idx, t_idx)]
-R = P[np.ix_(t_idx, e_idx)]
+for s, nxt in transitions.items():
+    i = idx[s]
+    for t, p in nxt.items():
+        P[i, idx[t]] = p
 
-I = np.eye(len(Q))
-B = np.linalg.solve(I - Q, R)
+# absorbing states get identity rows
+for s in absorbing:
+    i = idx[s]
+    P[i, i] = 1.0
 
-result = {
-    transient_states[i]: {end_states[j]: B[i, j] for j in range(len(end_states))} for i in range(len(transient_states))
-}
+# reorder: transient first, then absorbing
+order = transient + absorbing
+idx2 = {s: i for i, s in enumerate(order)}
 
-with open(os.path.join("output", "output_all_end_state_freq.json"), "w") as json_file:
+P2 = P[
+    np.ix_([idx[s] for s in order],
+           [idx[s] for s in order])
+]
+
+t = len(transient)
+Q = P2[:t, :t]
+R = P2[:t, t:]
+
+I = np.eye(Q.shape[0])
+N = np.linalg.inv(I - Q)
+B = N @ R   # absorption probabilities matrix
+
+# ---------- FUNCTION (cheap calls) ----------
+
+def end_probs(state):
+    if state in absorbing:
+        return {state: 1.0}
+    
+    si = transient.index(state)
+    result = {absorbing[j]: float(B[si, j]) for j in range(len(absorbing))}
+    return {
+        "touchdown": result["touchdown"],
+        "punt": result["punt"],
+        "bad_fg": result["bad_fg"],
+        "made_fg": result["made_fg"],
+        "turnover": result["turnover"],
+    }
+
+result = {}
+
+for state in transitions.keys():
+    result[state] = end_probs(state)
+
+with open(os.path.join("output", "output_all_end_prob.json"), "w") as json_file:
     json.dump(result, json_file)
 
-print("Dumped end state probabilities for all seasons in output_all_end_state_freq.json")
+print("Dumped end state probabilities to output_all_end_prob.json")
