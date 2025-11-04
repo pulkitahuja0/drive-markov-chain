@@ -2,28 +2,33 @@
 	import DataBox from '$lib/components/DataBox.svelte';
 	import { downToText, stateMatcher } from '$lib/helpers.js';
 
-    const getKey = (states: Record<string, Record<string, number>>, down: number, yardsToGo: number, yardline: number) => {
-        if (states.hasOwnProperty(createKey(down, yardsToGo, yardline))) {
-            return createKey(down, yardsToGo, yardline);
-        }
+	const getKey = (
+		states: Record<string, Record<string, number>>,
+		down: number,
+		yardsToGo: number,
+		yardline: number
+	) => {
+		if (states.hasOwnProperty(createKey(down, yardsToGo, yardline))) {
+			return createKey(down, yardsToGo, yardline);
+		}
 
-        const sameDownStates = Object.keys(states).filter((string) => string.startsWith(`${down}.0`));
+		const sameDownStates = Object.keys(states).filter((string) => string.startsWith(`${down}.0`));
 
-        let closestState = [Infinity, Infinity];
-        let currClosestDistance = Infinity;
+		let closestState = [Infinity, Infinity];
+		let currClosestDistance = Infinity;
 
-        sameDownStates.map((state) => {
-            const [, yardsToGo1, yardline1] = stateMatcher(state);
-            const distance = Math.sqrt((yardsToGo - yardsToGo1)**2 + (yardline - yardline1)**2);
+		sameDownStates.map((state) => {
+			const [, yardsToGo1, yardline1] = stateMatcher(state);
+			const distance = Math.sqrt((yardsToGo - yardsToGo1) ** 2 + (yardline - yardline1) ** 2);
 
-            if (distance < currClosestDistance) {
-                currClosestDistance = distance;
-                closestState = [yardsToGo1, yardline1];
-            }
-        });
+			if (distance < currClosestDistance) {
+				currClosestDistance = distance;
+				closestState = [yardsToGo1, yardline1];
+			}
+		});
 
-        return createKey(down, closestState[0], closestState[1]);
-    }
+		return createKey(down, closestState[0], closestState[1]);
+	};
 
 	const createKey = (down: number, yardsToGo: number, yardline: number) => {
 		return `${down}.0_${yardsToGo}.0_${yardline}.0`;
@@ -34,41 +39,42 @@
 	let yardsFromEndZone = $state(75);
 
 	let { data } = $props();
-    console.log(data);
+	console.log(data);
 	let nextPlayStates = data.freqs;
 	let endStates = data.endStates;
 
 	let currentNextPlayStates = $state({});
 	let currentEndStates = $state({});
 
-    let currentlyDisplaying = $state("");
+	let currentlyDisplaying = $state('');
 
 	$effect(() => {
-		currentNextPlayStates = nextPlayStates[getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone)];
+		currentNextPlayStates =
+			nextPlayStates[getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone)];
 		currentEndStates = endStates[getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone)];
 
-        currentlyDisplaying = getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone);
+		currentlyDisplaying = getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone);
 	});
 
-    $effect(() => {
-        if (yardsFromEndZone > 100) yardsFromEndZone = 100;
-        if (yardsFromEndZone < 0) yardsFromEndZone = 0;
-        if (typeof yardsFromEndZone != "number") yardsFromEndZone = 0;
-    })
+	$effect(() => {
+		if (yardsFromEndZone > 100) yardsFromEndZone = 100;
+		if (yardsFromEndZone < 0) yardsFromEndZone = 0;
+		if (typeof yardsFromEndZone != 'number') yardsFromEndZone = 0;
+	});
 </script>
 
 {#if currentlyDisplaying !== createKey(down, yardsToGo, yardsFromEndZone)}
-    <div class="text-center text-red-500 text-lg m-6">
-        Displaying {downToText(down)} & {(() => {
-            const [, y, y2] = stateMatcher(currentlyDisplaying);
-            return `${y} ${y2} yards from the end zone.`;
-        })()}
-    </div>
+	<div class="m-6 text-center text-lg text-red-500">
+		Displaying {downToText(down)} & {(() => {
+			const [, y, y2] = stateMatcher(currentlyDisplaying);
+			return `${y} ${y2} yards from the end zone.`;
+		})()}
+	</div>
 {/if}
 
 {#if nextPlayStates && endStates}
 	<div class="m-8">
-		<div class="grid md:grid-cols-3 sm:grid-cols-1 gap-2">
+		<div class="grid gap-2 sm:grid-cols-1 md:grid-cols-3">
 			<div class="self-start border-2 border-black">
 				<div class="m-3">
 					<select
@@ -84,14 +90,17 @@
 					<input
 						bind:value={yardsToGo}
 						defaultValue={10}
-                        step = {1}
+						step={1}
 						type="number"
 						class="w-1/10 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
-					/> 
+					/>
 					<input
 						bind:value={yardsFromEndZone}
 						defaultValue={75}
-						type="number" min={0} max={100} step={1}
+						type="number"
+						min={0}
+						max={100}
+						step={1}
 						class="w-1/8 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
 					/> yards from the end zone.
 				</div>
