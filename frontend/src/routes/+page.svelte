@@ -1,5 +1,29 @@
 <script lang="ts">
 	import DataBox from '$lib/components/DataBox.svelte';
+	import { downToText, stateMatcher } from '$lib/helpers.js';
+
+    const getKey = (states: Record<string, Record<string, number>>, down: number, yardsToGo: number, yardline: number) => {
+        if (states.hasOwnProperty(createKey(down, yardsToGo, yardline))) {
+            return createKey(down, yardsToGo, yardline);
+        }
+
+        const sameDownStates = Object.keys(states).filter((string) => string.startsWith(`${down}.0`));
+
+        let closestState = [Infinity, Infinity];
+        let currClosestDistance = Infinity;
+
+        sameDownStates.map((state) => {
+            const [, yardsToGo1, yardline1] = stateMatcher(state);
+            const distance = Math.sqrt((yardsToGo - yardsToGo1)**2 + (yardline - yardline1)**2);
+
+            if (distance < currClosestDistance) {
+                currClosestDistance = distance;
+                closestState = [yardsToGo1, yardline1];
+            }
+        });
+
+        return createKey(down, closestState[0], closestState[1]);
+    }
 
 	const createKey = (down: number, yardsToGo: number, yardline: number) => {
 		return `${down}.0_${yardsToGo}.0_${yardline}.0`;
@@ -10,15 +34,20 @@
 	let yardline = $state(25);
 
 	let { data } = $props();
+    console.log(data);
 	let nextPlayStates = data.freqs;
 	let endStates = data.endStates;
 
 	let currentNextPlayStates = $state({});
 	let currentEndStates = $state({});
 
+    let currentlyDisplaying = $state("");
+
 	$effect(() => {
-		currentNextPlayStates = nextPlayStates[createKey(down, yardsToGo, yardline)];
-		currentEndStates = endStates[createKey(down, yardsToGo, yardline)];
+		currentNextPlayStates = nextPlayStates[getKey(nextPlayStates, down, yardsToGo, yardline)];
+		currentEndStates = endStates[getKey(nextPlayStates, down, yardsToGo, yardline)];
+
+        currentlyDisplaying = getKey(nextPlayStates, down, yardsToGo, yardline);
 	});
 </script>
 
@@ -56,4 +85,13 @@
 			<DataBox label={'End of drive probabilities:'} bind:data={currentEndStates} />
 		</div>
 	</div>
+{/if}
+
+{#if currentlyDisplaying !== createKey(down, yardsToGo, yardline)}
+    <div>
+        Displaying {downToText(down)} & {(() => {
+            const [, y, y2] = stateMatcher(currentlyDisplaying);
+            return `${y} at the ${y2}`;
+        })()}
+    </div>
 {/if}
