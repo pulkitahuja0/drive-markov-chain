@@ -28,3 +28,7 @@ export const stateMatcher = (key: string) => {
 		return [0, 0, 0];
 	}
 };
+
+export const createKey = (down: number, yardsToGo: number, yardline: number) => {
+	return `${down}.0_${yardsToGo}.0_${yardline}.0`;
+};

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import DataBox from '$lib/components/DataBox.svelte';
-	import { downToText, stateMatcher } from '$lib/helpers.js';
+	import { createKey, downToText, stateMatcher } from '$lib/helpers.js';
 
 	const getKey = (
 		states: Record<string, Record<string, number>>,
@@ -28,10 +28,6 @@
 		});
 
 		return createKey(down, closestState[0], closestState[1]);
-	};
-
-	const createKey = (down: number, yardsToGo: number, yardline: number) => {
-		return `${down}.0_${yardsToGo}.0_${yardline}.0`;
 	};
 
 	let down = $state(1);
