@@ -31,7 +31,7 @@
 
 	let down = $state(1);
 	let yardsToGo = $state(10);
-	let yardline = $state(25);
+	let yardline = $state(75);
 
 	let { data } = $props();
     console.log(data);
@@ -60,25 +60,24 @@
 						bind:value={down}
 						class="rounded-lg border border-gray-400 bg-gray-50 p-1 focus:border-gray-400"
 					>
-						<option value={1} selected> 1st </option>
-						<option value={2}> 2nd </option>
-						<option value={3}> 3rd </option>
-						<option value={4}> 4th </option>
+						<option value={1} selected>1st</option>
+						<option value={2}>2nd</option>
+						<option value={3}>3rd</option>
+						<option value={4}>4th</option>
 					</select>
 					&
 					<input
 						bind:value={yardsToGo}
 						defaultValue={10}
-						type="text"
-						class="w-1/16 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
-					/>
-					from the
+						type="number"
+						class="w-1/10 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
+					/> 
 					<input
 						bind:value={yardline}
-						defaultValue={25}
-						type="text"
-						class="w-1/14 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
-					/> yardline.
+						defaultValue={75}
+						type="number" min="0" max="100"
+						class="w-1/8 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
+					/> yards from the end zone.
 				</div>
 			</div>
 			<DataBox label={'Next play probabilities:'} bind:data={currentNextPlayStates} />
@@ -88,10 +87,10 @@
 {/if}
 
 {#if currentlyDisplaying !== createKey(down, yardsToGo, yardline)}
-    <div>
+    <div class="text-center">
         Displaying {downToText(down)} & {(() => {
             const [, y, y2] = stateMatcher(currentlyDisplaying);
-            return `${y} at the ${y2}`;
+            return `${y} ${y2} yards from the end zone.`;
         })()}
     </div>
 {/if}

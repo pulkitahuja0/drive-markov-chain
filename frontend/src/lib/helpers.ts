@@ -13,7 +13,7 @@ export const keyToLabel = (key: string) => {
 	if (key == 'made_fg') return 'Made Field Goal';
 
 	const [down, yardsToGo, yardline] = stateMatcher(key);
-	return `${downToText(down)} & ${yardsToGo} at the ${yardline}`;
+	return `${downToText(down)} & ${yardsToGo} ${yardline} yards from the end zone`;
 };
 
 export const stateMatcher = (key: string) => {
