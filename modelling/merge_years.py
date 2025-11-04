@@ -13,13 +13,16 @@ for filename in os.listdir("output"):
                 for next_state, occurences in data[prev_state].items():
                     merged_data[prev_state][next_state] += occurences
 
-filepath = os.path.join("output", "output_all.json")
-
 relative_frequencies = {
     k: {ik: iv / sum(inner.values()) if sum(inner.values()) else 0 for ik, iv in inner.items()} for k, inner in merged_data.items()
 }
 
-with open(filepath, "w") as json_file:
+with open(os.path.join("output", "output_all_freq.json"), "w") as json_file:
     json.dump(relative_frequencies, json_file)
 
-print("Merged all seasons relative frequencies in output_all.json")
+print("Merged all seasons relative frequencies in output_all_freq.json")
+
+with open(os.path.join("output", "output_all.json"), "w") as json_file:
+    json.dump(merged_data, json_file)
+
+print("Merged all seasons frequencies in output_all.json")
