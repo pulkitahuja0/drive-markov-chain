@@ -8,12 +8,14 @@
 		yardsToGo: number,
 		yardline: number
 	) => {
+        // If state is already present in data, use it
 		if (states.hasOwnProperty(createKey(down, yardsToGo, yardline))) {
 			return createKey(down, yardsToGo, yardline);
 		}
 
 		const sameDownStates = Object.keys(states).filter((string) => string.startsWith(`${down}.0`));
 
+        // Find state that is closest in yards to go and yards from endzone
 		let closestState = [Infinity, Infinity];
 		let currClosestDistance = Infinity;
 
@@ -35,13 +37,13 @@
 	let yardsFromEndZone = $state(75);
 
 	let { data } = $props();
-	console.log(data);
 	let nextPlayStates = data.freqs;
 	let endStates = data.endStates;
 
 	let currentNextPlayStates = $state({});
 	let currentEndStates = $state({});
 
+    // Variable to help track if using closest state instead of direct state
 	let currentlyDisplaying = $state('');
 
 	$effect(() => {
@@ -52,6 +54,7 @@
 		currentlyDisplaying = getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone);
 	});
 
+    // Ensure input is valid
 	$effect(() => {
 		if (yardsFromEndZone > 100) yardsFromEndZone = 99;
 		if (yardsFromEndZone < 0) yardsFromEndZone = 0;
@@ -101,7 +104,7 @@
 					/> yards from the end zone.
 				</div>
 			</div>
-			<DataBox label={'Next play probabilities:'} bind:data={currentNextPlayStates} />
+			<DataBox label={'Next position probabilities:'} bind:data={currentNextPlayStates} />
 			<DataBox label={'End of drive probabilities:'} bind:data={currentEndStates} />
 		</div>
 	</div>
