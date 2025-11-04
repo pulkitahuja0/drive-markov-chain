@@ -31,7 +31,7 @@
 
 	let down = $state(1);
 	let yardsToGo = $state(10);
-	let yardline = $state(75);
+	let yardsFromEndZone = $state(75);
 
 	let { data } = $props();
     console.log(data);
@@ -44,11 +44,17 @@
     let currentlyDisplaying = $state("");
 
 	$effect(() => {
-		currentNextPlayStates = nextPlayStates[getKey(nextPlayStates, down, yardsToGo, yardline)];
-		currentEndStates = endStates[getKey(nextPlayStates, down, yardsToGo, yardline)];
+		currentNextPlayStates = nextPlayStates[getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone)];
+		currentEndStates = endStates[getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone)];
 
-        currentlyDisplaying = getKey(nextPlayStates, down, yardsToGo, yardline);
+        currentlyDisplaying = getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone);
 	});
+
+    $effect(() => {
+        if (yardsFromEndZone > 100) yardsFromEndZone = 100;
+        if (yardsFromEndZone < 0) yardsFromEndZone = 0;
+        if (typeof yardsFromEndZone != "number") yardsFromEndZone = 0;
+    })
 </script>
 
 {#if nextPlayStates && endStates}
@@ -69,13 +75,14 @@
 					<input
 						bind:value={yardsToGo}
 						defaultValue={10}
+                        step = {1}
 						type="number"
 						class="w-1/10 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
 					/> 
 					<input
-						bind:value={yardline}
+						bind:value={yardsFromEndZone}
 						defaultValue={75}
-						type="number" min="0" max="100"
+						type="number" min={0} max={100} step={1}
 						class="w-1/8 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
 					/> yards from the end zone.
 				</div>
@@ -86,8 +93,8 @@
 	</div>
 {/if}
 
-{#if currentlyDisplaying !== createKey(down, yardsToGo, yardline)}
-    <div class="text-center">
+{#if currentlyDisplaying !== createKey(down, yardsToGo, yardsFromEndZone)}
+    <div class="text-center text-red-500 text-lg">
         Displaying {downToText(down)} & {(() => {
             const [, y, y2] = stateMatcher(currentlyDisplaying);
             return `${y} ${y2} yards from the end zone.`;
