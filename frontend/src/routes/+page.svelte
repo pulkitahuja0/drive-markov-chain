@@ -53,7 +53,7 @@
 	});
 
 	$effect(() => {
-		if (yardsFromEndZone > 100) yardsFromEndZone = 100;
+		if (yardsFromEndZone > 100) yardsFromEndZone = 99;
 		if (yardsFromEndZone < 0) yardsFromEndZone = 0;
 		if (typeof yardsFromEndZone != 'number') yardsFromEndZone = 0;
 	});
@@ -95,7 +95,7 @@
 						defaultValue={75}
 						type="number"
 						min={0}
-						max={100}
+						max={99}
 						step={1}
 						class="w-1/8 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
 					/> yards from the end zone.
