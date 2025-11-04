@@ -42,6 +42,7 @@ for drive_df in pbp.partition_by(["game_id", "drive"], maintain_order=True):
             data[prev_play_id][f"{next_play["down"]}_{next_play["ydstogo"]}_{next_play["yardline_100"]}"] += 1
         elif next_play["play_type"] == "punt":
             data[prev_play_id]["punt"] += 1
+            continue
 
 file_name = f"output_{year}_szn.json"
 filepath = os.path.join("output", file_name)

@@ -26,3 +26,4 @@ with open(os.path.join("output", "output_all.json"), "w") as json_file:
     json.dump(merged_data, json_file)
 
 print("Merged all seasons frequencies in output_all.json")
+print(f"Total of {len(merged_data.keys())} transient states")
