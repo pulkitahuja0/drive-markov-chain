@@ -47,8 +47,6 @@ I = np.eye(Q.shape[0])
 N = np.linalg.inv(I - Q)
 B = N @ R   # absorption probabilities matrix
 
-# ---------- FUNCTION (cheap calls) ----------
-
 def end_probs(state):
     if state in absorbing:
         return {state: 1.0}
