@@ -57,9 +57,18 @@
     })
 </script>
 
+{#if currentlyDisplaying !== createKey(down, yardsToGo, yardsFromEndZone)}
+    <div class="text-center text-red-500 text-lg m-6">
+        Displaying {downToText(down)} & {(() => {
+            const [, y, y2] = stateMatcher(currentlyDisplaying);
+            return `${y} ${y2} yards from the end zone.`;
+        })()}
+    </div>
+{/if}
+
 {#if nextPlayStates && endStates}
 	<div class="m-8">
-		<div class="grid grid-cols-3 gap-2">
+		<div class="grid md:grid-cols-3 sm:grid-cols-1 gap-2">
 			<div class="self-start border-2 border-black">
 				<div class="m-3">
 					<select
@@ -91,13 +100,4 @@
 			<DataBox label={'End of drive probabilities:'} bind:data={currentEndStates} />
 		</div>
 	</div>
-{/if}
-
-{#if currentlyDisplaying !== createKey(down, yardsToGo, yardsFromEndZone)}
-    <div class="text-center text-red-500 text-lg">
-        Displaying {downToText(down)} & {(() => {
-            const [, y, y2] = stateMatcher(currentlyDisplaying);
-            return `${y} ${y2} yards from the end zone.`;
-        })()}
-    </div>
 {/if}
