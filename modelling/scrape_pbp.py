@@ -12,8 +12,16 @@ pbp = nfl.load_pbp([year]).filter(~pl.col("play_type").is_in(["no_play", "kickof
 
 data = defaultdict(lambda: defaultdict(int))
 
+end_states = set(["touchdown", "made_fg", "bad_fg", "turnover", "punt"])
+
 for drive_df in pbp.partition_by(["game_id", "drive"], maintain_order=True):
     if drive_df.select(pl.col("play_type").is_in(["qb_kneel"]).any()).item():
+        continue
+
+    last_play = drive_df.row(drive_df.height - 1, named=True)
+
+    # If a drive doesn't end with a turnover, score or punt, shouldn't be used in data
+    if not (last_play["play_type"] == "punt" or last_play["touchdown"] == 1 or last_play["play_type"] == "field_goal" or last_play["interception"] == 1 or last_play["fumble_lost"] == 1 or last_play["fourth_down_failed"] == 1):
         continue
 
     for i in range(drive_df.height  - 1):

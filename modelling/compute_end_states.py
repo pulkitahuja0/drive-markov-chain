@@ -56,17 +56,18 @@ def end_probs(state):
     si = transient.index(state)
     result = {absorbing[j]: float(B[si, j]) for j in range(len(absorbing))}
     return {
-        "touchdown": result["touchdown"],
-        "punt": result["punt"],
-        "bad_fg": result["bad_fg"],
-        "made_fg": result["made_fg"],
-        "turnover": result["turnover"],
+        "touchdown": result.get("touchdown", 0),
+        "punt": result.get("punt", 0),
+        "bad_fg": result.get("bad_fg", 0),
+        "made_fg": result.get("made_fg", 0),
+        "turnover": result.get("turnover", 0),
     }
 
 result = {}
 
 for state in transitions.keys():
-    result[state] = end_probs(state)
+    if state not in ["touchdown", "punt", "bad_fg", "made_fg", "turnover"]:
+        result[state] = end_probs(state)
 
 with open(os.path.join("output", "output_all_end_prob.json"), "w") as json_file:
     json.dump(result, json_file)
