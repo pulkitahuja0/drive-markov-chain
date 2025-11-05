@@ -11,6 +11,7 @@ Every state outside of those end states is stored as a combination of the down, 
 `scrape_pbp.py` takes one command line argument which is the season to scrape from - and will put the data into `output/output_year.json`.
 
 `merge_years.py` merges the seasons together and normalizes it to relative frequencies.
+
 `compute_end_states.py` creates a table of end states of a drive for each seen field position - ie will a drive currently at 2nd and 6 65 yards from the end zone end up scoring?
 
 ## Frontend
