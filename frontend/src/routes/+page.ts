@@ -10,4 +10,4 @@ export const load: PageLoad = async ({ fetch }) => {
 	};
 };
 
-export const ssr = false;
+export const ssr = true;
