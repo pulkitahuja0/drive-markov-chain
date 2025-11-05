@@ -42,6 +42,8 @@ for drive_df in pbp.partition_by(["game_id", "drive"], maintain_order=True):
             else:
                 data[play_id]["bad_fg"] += 1
             continue
+        elif play["safety"] == 1:
+            data[play_id]["safety"] += 1
 
         if play["fourth_down_failed"] == 1 or play["interception"] == 1 or play["fumble_lost"] == 1:
             data[play_id]["turnover"] += 1
