@@ -18,12 +18,12 @@ relative_frequencies = {
 }
 
 with open(os.path.join("output", "output_all_freq.json"), "w") as json_file:
-    json.dump(relative_frequencies, json_file)
+    json.dump(relative_frequencies, json_file, separators=(",", ":"))
 
 print("Merged all seasons relative frequencies in output_all_freq.json")
 
 with open(os.path.join("output", "output_all.json"), "w") as json_file:
-    json.dump(merged_data, json_file)
+    json.dump(merged_data, json_file, separators=(",", ":"))
 
 print("Merged all seasons frequencies in output_all.json")
 print(f"Total of {len(merged_data.keys())} transient states")

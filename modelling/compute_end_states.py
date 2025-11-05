@@ -68,6 +68,6 @@ for state in transitions.keys():
         result[state] = end_probs(state)
 
 with open(os.path.join("output", "output_all_end_prob.json"), "w") as json_file:
-    json.dump(result, json_file)
+    json.dump(result, json_file, separators=(",", ":"))
 
 print("Dumped end state probabilities to output_all_end_prob.json")
