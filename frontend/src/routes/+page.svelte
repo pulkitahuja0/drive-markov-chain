@@ -79,6 +79,7 @@
 					<select
 						bind:value={down}
 						class="rounded-lg border border-gray-400 bg-gray-50 p-1 focus:border-gray-400"
+						aria-label="Down"
 					>
 						<option value={1} selected>1st</option>
 						<option value={2}>2nd</option>
@@ -92,6 +93,7 @@
 						step={1}
 						type="number"
 						class="w-1/10 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
+						aria-label="Yards from first down/goal"
 					/>
 					<input
 						bind:value={yardsFromEndZone}
@@ -101,6 +103,7 @@
 						max={99}
 						step={1}
 						class="w-1/8 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
+						aria-label="Yards from end zone"
 					/> yards from the end zone.
 				</div>
 			</div>
