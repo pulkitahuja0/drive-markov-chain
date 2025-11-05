@@ -50,4 +50,7 @@ jobs:
         run: |
           cd frontend
           npm install -g vercel@latest
-          vercel deploy --prebuilt --prod \ --token ${{ secrets.VERCEL_ACCESS_TOKEN }} \ --yes \ --org-id ${{ secrets.VERCEL_ORG_ID }} \ --project-id ${{ secrets.VERCEL_PROJECT_TOKEN }}
+          vercel deploy --prebuilt --prod --yes \
+            --token=${{ secrets.VERCEL_ACCESS_TOKEN }} \
+            --org-id=${{ secrets.VERCEL_ORG_ID }} \
+            --project-id=${{ secrets.VERCEL_PROJECT_TOKEN }}
