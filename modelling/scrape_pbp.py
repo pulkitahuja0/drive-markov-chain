@@ -24,32 +24,31 @@ for drive_df in pbp.partition_by(["game_id", "drive"], maintain_order=True):
     if not (last_play["play_type"] == "punt" or last_play["touchdown"] == 1 or last_play["play_type"] == "field_goal" or last_play["interception"] == 1 or last_play["fumble_lost"] == 1 or last_play["fourth_down_failed"] == 1):
         continue
 
-    for i in range(drive_df.height  - 1):
-        prev_play = drive_df.row(i, named=True)
-        next_play = drive_df.row(i + 1, named=True)
+    for i in range(drive_df.height):
+        play = drive_df.row(i, named=True)
+        play_id = f"{play["down"]}_{play["ydstogo"]}_{play["yardline_100"]}"
 
-        prev_play_id = f"{prev_play["down"]}_{prev_play["ydstogo"]}_{prev_play["yardline_100"]}"
+        if (i != 0):
+            prev_play = drive_df.row(i - 1, named=True)
+            prev_play_id = f"{prev_play["down"]}_{prev_play["ydstogo"]}_{prev_play["yardline_100"]}"
+            data[prev_play_id][play_id] += 1
 
-        # Check for scoring play
-        if next_play["touchdown"] == 1:
-            data[prev_play_id]["touchdown"] += 1
+        if play["touchdown"] == 1:
+            data[play_id]["touchdown"] += 1
             continue
-        elif next_play["play_type"] == "field_goal":
-            if next_play["field_goal_result"] == "made":
-                data[prev_play_id]["made_fg"] += 1
+        elif play["play_type"] == "field_goal":
+            if play["field_goal_result"] == "made":
+                data[play_id]["made_fg"] += 1
             else:
-                data[prev_play_id]["bad_fg"] += 1
+                data[play_id]["bad_fg"] += 1
             continue
 
-        # Check for turnovers
-        if next_play["fourth_down_failed"] == 1 or next_play["interception"] == 1 or next_play["fumble_lost"] == 1:
-            data[prev_play_id]["turnover"] += 1
+        if play["fourth_down_failed"] == 1 or play["interception"] == 1 or play["fumble_lost"] == 1:
+            data[play_id]["turnover"] += 1
             continue
-
-        if next_play["play_type"] == "pass" or next_play["play_type"] == "rush":
-            data[prev_play_id][f"{next_play["down"]}_{next_play["ydstogo"]}_{next_play["yardline_100"]}"] += 1
-        elif next_play["play_type"] == "punt":
-            data[prev_play_id]["punt"] += 1
+    
+        if play["play_type"] == "punt":
+            data[play_id]["punt"] += 1
             continue
 
 file_name = f"output_{year}_szn.json"
