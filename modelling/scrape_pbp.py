@@ -59,4 +59,4 @@ os.makedirs("output", exist_ok=True)
 with open(filepath, "w") as json_file:
     json.dump(data, json_file, separators=(",", ":"))
 
-print(f"Dumped play by play data state transitions from the {year} season.")
+print(f"Dumped {len(data.keys())} play by play data state transitions from the {year} season.")
