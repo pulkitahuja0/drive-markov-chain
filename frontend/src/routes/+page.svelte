@@ -8,14 +8,14 @@
 		yardsToGo: number,
 		yardline: number
 	) => {
-        // If state is already present in data, use it
+		// If state is already present in data, use it
 		if (states.hasOwnProperty(createKey(down, yardsToGo, yardline))) {
 			return createKey(down, yardsToGo, yardline);
 		}
 
 		const sameDownStates = Object.keys(states).filter((string) => string.startsWith(`${down}.0`));
 
-        // Find state that is closest in yards to go and yards from endzone
+		// Find state that is closest in yards to go and yards from endzone
 		let closestState = [Infinity, Infinity];
 		let currClosestDistance = Infinity;
 
@@ -43,7 +43,7 @@
 	let currentNextPlayStates = $state({});
 	let currentEndStates = $state({});
 
-    // Variable to help track if using closest state instead of direct state
+	// Variable to help track if using closest state instead of direct state
 	let currentlyDisplaying = $state('');
 
 	$effect(() => {
@@ -54,7 +54,7 @@
 		currentlyDisplaying = getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone);
 	});
 
-    // Ensure input is valid
+	// Ensure input is valid
 	$effect(() => {
 		if (yardsFromEndZone > 100) yardsFromEndZone = 99;
 		if (yardsFromEndZone < 0) yardsFromEndZone = 0;
