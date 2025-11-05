@@ -1,0 +1,53 @@
+name: Build and Deploy to Vercel
+
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14.0'
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 2.2.1
+      - name: Install dependencies & run scripts
+        run: |
+          cd modelling
+          poetry install
+          poetry run python scrape_pbp.py 2015
+          poetry run python scrape_pbp.py 2016
+          poetry run python scrape_pbp.py 2017
+          poetry run python scrape_pbp.py 2018
+          poetry run python scrape_pbp.py 2019
+          poetry run python scrape_pbp.py 2020
+          poetry run python scrape_pbp.py 2021
+          poetry run python scrape_pbp.py 2022
+          poetry run python scrape_pbp.py 2023
+          poetry run python scrape_pbp.py 2024
+          poetry run python merge_years.py
+          poetry run python compute_end_states.py
+          mkdir -p ../frontend/static/data
+          cp -r output/output_all_end_prob.json ../frontend/static/data/
+          cp -r output/output_all_freq.json ../frontend/static/data/
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 25
+      - name: Install frontend
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+      - name: Deploy to Vercel
+        run: |
+          cd frontend
+          npm install -g vercel@latest
+          vercel deploy --prebuilt --prod \ --token ${{ secrets.VERCEL_ACCESS_TOKEN }} \ --yes \ --org-id ${{ secrets.VERCEL_ORG_ID }} \ --project-id ${{ secrets.VERCEL_PROJECT_TOKEN }}
