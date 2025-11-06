@@ -42,7 +42,7 @@ for drive_df in pbp.partition_by(["game_id", "drive"], maintain_order=True):
             else:
                 data[play_id]["bad_fg"] += 1
             continue
-        elif play["safety"] == 1:
+        elif play["safety"] == 1 and play["extra_point_attempt"] == 0 and play["two_point_attempt"] == 0: # Make sure that safeties in 2 point or extra point attempts aren't counted
             data[play_id]["safety"] += 1
             continue
 
