@@ -4,7 +4,7 @@ Uses play by play data from the NFL to model how field positions change. Modelli
 
 ## Modelling
 
-Only drives that end in a **punt**, **turnover**, **touchdown**, or **successful or unsuccessful field goal attempt** are counted. Drives that end otherwise might end for example without getting to one of those end states before the half ends, which muddies the data and makes it harder to analyze properly, so they are not included.
+Only drives that end in a **punt**, **turnover**, **touchdown**, **successful or unsuccessful field goal attempt**, or **safety** are counted. Drives that end otherwise might end for example without getting to one of those end states before the half ends, which muddies the data and makes it harder to analyze properly, so they are not included.
 
 Every state outside of those end states is stored as a combination of the down, the yards to first down (or to endzone if in a goaline situation), and the yards to the endzone. Scraping the play by play data, we can store how a drive may transition from one state to another. 
 
