@@ -62,6 +62,8 @@
 	});
 </script>
 
+<div class="min-h-screen flex flex-col">
+	<div class="flex-grow">
 {#if currentlyDisplaying !== createKey(down, yardsToGo, yardsFromEndZone)}
 	<div class="m-6 text-center text-lg text-red-500">
 		Displaying {downToText(down)} & {(() => {
@@ -112,3 +114,9 @@
 		</div>
 	</div>
 {/if}
+</div>
+
+<footer class="text-center w-full mb-6">
+	Data from 2015 - 2024 seasons. Check it out on <a href="https://github.com/pulkitahuja0/drive-markov-chain" class="text-blue-400 hover:text-blue-600 underline">Github.</a>
+</footer>
+</div>
