@@ -64,15 +64,6 @@
 
 <div class="flex min-h-screen flex-col">
 	<div class="grow">
-		{#if currentlyDisplaying !== createKey(down, yardsToGo, yardsFromEndZone)}
-			<div class="m-6 text-center text-lg text-red-500">
-				Displaying {downToText(down)} & {(() => {
-					const [, y, y2] = stateMatcher(currentlyDisplaying);
-					return `${y} ${y2} yards from the end zone.`;
-				})()}
-			</div>
-		{/if}
-
 		{#if nextPlayStates && endStates}
 			<div class="m-8">
 				<div class="grid gap-2 sm:grid-cols-1 md:grid-cols-3">
@@ -112,6 +103,15 @@
 					<DataBox label={'Next play/position probabilities:'} bind:data={currentNextPlayStates} />
 					<DataBox label={'End of drive probabilities:'} bind:data={currentEndStates} />
 				</div>
+			</div>
+		{/if}
+
+		{#if currentlyDisplaying !== createKey(down, yardsToGo, yardsFromEndZone)}
+			<div class="m-6 text-center text-lg text-red-500">
+				Displaying {downToText(down)} & {(() => {
+					const [, y, y2] = stateMatcher(currentlyDisplaying);
+					return `${y} ${y2} yards from the end zone.`;
+				})()}
 			</div>
 		{/if}
 	</div>
