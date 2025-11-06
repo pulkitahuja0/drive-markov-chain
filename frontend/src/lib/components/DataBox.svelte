@@ -3,6 +3,7 @@
 
 	let { label, data = $bindable() } = $props();
 
+	// Slices the top 10 next states by probability to display
 	let top10 = $derived.by(() => {
 		let a: [string, number][] = [];
 		Object.keys(data).map((key) => a.push([key, data[key]]));
