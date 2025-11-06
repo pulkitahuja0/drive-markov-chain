@@ -37,14 +37,14 @@
 	let yardsFromEndZone = $state(75);
 
 	let { data } = $props();
-	let nextPlayStates = data.freqs;
-	let endStates = data.endStates;
+	const nextPlayStates = data.freqs;
+	const endStates = data.endStates;
 
 	let currentNextPlayStates = $state({});
 	let currentEndStates = $state({});
 
 	// Variable to help track if using closest state instead of direct state
-	let currentlyDisplaying = $state('');
+	let currentlyDisplaying = $state('1.0_10.0_75.0');
 
 	$effect(() => {
 		currentNextPlayStates =
