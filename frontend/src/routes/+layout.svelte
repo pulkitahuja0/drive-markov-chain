@@ -7,7 +7,10 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
-	<meta name="description" content="Markov chain modelling for National Football League (NFL) drives" />
+	<meta
+		name="description"
+		content="Markov chain modelling for National Football League (NFL) drives"
+	/>
 	<title>NFL Drives</title>
 </svelte:head>
 
