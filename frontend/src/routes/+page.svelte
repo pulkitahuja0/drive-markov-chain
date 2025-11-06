@@ -63,7 +63,7 @@
 </script>
 
 <div class="flex min-h-screen flex-col">
-	<div class="flex-grow">
+	<div class="grow">
 		{#if currentlyDisplaying !== createKey(down, yardsToGo, yardsFromEndZone)}
 			<div class="m-6 text-center text-lg text-red-500">
 				Displaying {downToText(down)} & {(() => {
