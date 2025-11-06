@@ -15,7 +15,8 @@
 			key == 'punt' ||
 			key == 'turnover' ||
 			key == 'bad_fg' ||
-			key == 'made_fg'
+			key == 'made_fg' ||
+			key == 'safety'
 		);
 	};
 </script>

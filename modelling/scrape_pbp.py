@@ -20,6 +20,9 @@ for drive_df in pbp.partition_by(["game_id", "drive"], maintain_order=True):
 
     last_play = drive_df.row(drive_df.height - 1, named=True)
 
+    if play["extra_point_attempt"] == 1 or play["two_point_attempt"] == 1: # Skip xp or 2pt plays
+        continue
+
     # If a drive doesn't end with a turnover, score or punt, shouldn't be used in data
     if not (last_play["play_type"] == "punt" or last_play["touchdown"] == 1 or last_play["play_type"] == "field_goal" or last_play["interception"] == 1 or last_play["fumble_lost"] == 1 or last_play["fourth_down_failed"] == 1):
         continue
@@ -41,6 +44,9 @@ for drive_df in pbp.partition_by(["game_id", "drive"], maintain_order=True):
                 data[play_id]["made_fg"] += 1
             else:
                 data[play_id]["bad_fg"] += 1
+            continue
+        elif play["safety"] == 1:
+            data[play_id]["safety"] += 1
             continue
 
         if play["fourth_down_failed"] == 1 or play["interception"] == 1 or play["fumble_lost"] == 1:

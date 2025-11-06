@@ -59,12 +59,13 @@ def end_probs(state):
         "bad_fg": result.get("bad_fg", 0),
         "made_fg": result.get("made_fg", 0),
         "turnover": result.get("turnover", 0),
+        "safety": result.get("safety", 0)
     }
 
 result = {}
 
 for state in transitions.keys():
-    if state not in ["touchdown", "punt", "bad_fg", "made_fg", "turnover"]:
+    if state not in ["touchdown", "punt", "bad_fg", "made_fg", "turnover", "safety"]:
         result[state] = end_probs(state)
 
 with open(os.path.join("output", "output_all_end_prob.json"), "w") as json_file:
