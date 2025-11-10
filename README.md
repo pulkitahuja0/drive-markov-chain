@@ -8,7 +8,7 @@ Only drives that end in a **punt**, **turnover**, **touchdown**, **successful or
 
 Every state outside of those end states is stored as a combination of the down, the yards to first down (or to endzone if in a goaline situation), and the yards to the endzone. Scraping the play by play data, we can store how a drive may transition from one state to another. 
 
-`scrape_pbp.py` takes one command line argument which is the season to scrape from - and will put the data into `output/output_year.json`.
+`scrape_pbp.py` will scrape the play-by-play data for each season from 2015 to the most recent **fully complete** NFL season.
 
 `merge_years.py` merges the seasons together and normalizes it to relative frequencies.
 
