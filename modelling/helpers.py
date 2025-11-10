@@ -7,8 +7,6 @@ def most_recent_nfl_szn():
     year = today.year
     month = today.month
 
-    print(today.month)
-
     if month < 3:
         return year - 2
     return year - 1
