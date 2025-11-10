@@ -35,7 +35,7 @@ export const createKey = (down: number, yardsToGo: number, yardline: number) => 
 };
 
 export const mostRecentNFLSeason = () => {
-	const today = new Date('Jan 6, 2019');
+	const today = new Date();
 	const year = today.getFullYear();
 	const month = today.getMonth() + 1;
 
