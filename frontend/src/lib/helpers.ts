@@ -33,3 +33,11 @@ export const stateMatcher = (key: string) => {
 export const createKey = (down: number, yardsToGo: number, yardline: number) => {
 	return `${down}.0_${yardsToGo}.0_${yardline}.0`;
 };
+
+export const mostRecentNFLSeason = () => {
+	const today = new Date('Jan 6, 2019');
+	const year = today.getFullYear();
+	const month = today.getMonth() + 1;
+
+	return month < 3 ? year - 2 : year - 1;
+};

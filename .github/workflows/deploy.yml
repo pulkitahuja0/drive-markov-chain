@@ -22,16 +22,7 @@ jobs:
         run: |
           cd modelling
           poetry install
-          poetry run python scrape_pbp.py 2015
-          poetry run python scrape_pbp.py 2016
-          poetry run python scrape_pbp.py 2017
-          poetry run python scrape_pbp.py 2018
-          poetry run python scrape_pbp.py 2019
-          poetry run python scrape_pbp.py 2020
-          poetry run python scrape_pbp.py 2021
-          poetry run python scrape_pbp.py 2022
-          poetry run python scrape_pbp.py 2023
-          poetry run python scrape_pbp.py 2024
+          poetry run python scrape_pbp.py
           poetry run python merge_years.py
           poetry run python compute_end_states.py
           mkdir -p ../frontend/static/data
