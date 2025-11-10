@@ -8,8 +8,9 @@ import polars as pl
 import nflreadpy as nfl
 
 latest_szn = most_recent_nfl_szn()
+first_szn = sys.argv[1] if len(sys.argv) > 1 else 2015
 
-for year in range(2015, latest_szn + 1):
+for year in range(first_szn, latest_szn + 1):
     pbp = nfl.load_pbp([year]).filter(~pl.col("play_type").is_in(["no_play", "kickoff", "extra_point"]))
 
     data = defaultdict(lambda: defaultdict(int))
