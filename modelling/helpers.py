@@ -1,5 +1,6 @@
 from datetime import date
 
+# Gives year of most recent COMPLETE NFL szn
 def most_recent_nfl_szn():
     today = date.today()
 
