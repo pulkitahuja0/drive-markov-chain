@@ -1,4 +1,5 @@
 /modelling/output/**
+/modelling/__pycache__
 /frontend/node_modules/
 # Output
 /frontend/.output
