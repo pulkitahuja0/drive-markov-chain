@@ -39,30 +39,41 @@ for year in range(first_szn, latest_szn + 1):
                 prev_play_id = f"{prev_play["down"]}_{prev_play["ydstogo"]}_{prev_play["yardline_100"]}"
                 data[prev_play_id][play_id] += 1
 
-            if play["touchdown"] == 1:
-                data[play_id]["touchdown"] += 1
+            # Check interception first to mark pick six as turnover
+            if play["interception"] == 1:
+                data[play_id]["turnover"] += 1
                 continue
-            elif play["play_type"] == "field_goal":
+
+            # Check field goal before fumble to mark blocked/recovered FG as bad fg instead of turnover
+            if play["play_type"] == "field_goal":
                 if play["field_goal_result"] == "made":
                     data[play_id]["made_fg"] += 1
                 else:
                     data[play_id]["bad_fg"] += 1
                 continue
+
+            # Check punt before fumble to mark miffed punt as punt instead of turnover
+            if play["play_type"] == "punt":
+                data[play_id]["punt"] += 1
+                continue
+
+            # Check fumble lost before touchdown to mark fumble six as turnover instead of touchdown
+            if play["fumble_lost"] == 1:
+                data[play_id]["turnover"] += 1
+                continue
+
+            if play["touchdown"] == 1:
+                data[play_id]["touchdown"] += 1
+                continue
             elif play["safety"] == 1:
                 data[play_id]["safety"] += 1
                 continue
 
-            if play["interception"] == 1 or play["fumble_lost"] == 1:
-                data[play_id]["turnover"] += 1
-                continue
 
             if play["fourth_down_failed"] == 1:
                 data[play_id]["turnover_on_downs"] += 1
                 continue
-        
-            if play["play_type"] == "punt":
-                data[play_id]["punt"] += 1
-                continue
+
 
     file_name = f"output_{year}_szn.json"
     filepath = os.path.join("output", file_name)
