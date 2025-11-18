@@ -52,8 +52,12 @@ for year in range(first_szn, latest_szn + 1):
                 data[play_id]["safety"] += 1
                 continue
 
-            if play["fourth_down_failed"] == 1 or play["interception"] == 1 or play["fumble_lost"] == 1:
+            if play["interception"] == 1 or play["fumble_lost"] == 1:
                 data[play_id]["turnover"] += 1
+                continue
+
+            if play["fourth_down_failed"] == 1:
+                data[play_id]["turnover_on_downs"] += 1
                 continue
         
             if play["play_type"] == "punt":

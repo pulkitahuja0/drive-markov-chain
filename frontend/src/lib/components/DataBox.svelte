@@ -17,7 +17,8 @@
 			key == 'turnover' ||
 			key == 'bad_fg' ||
 			key == 'made_fg' ||
-			key == 'safety'
+			key == 'safety' ||
+			key == 'turnover_on_downs'
 		);
 	};
 </script>
