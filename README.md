@@ -1,5 +1,7 @@
 # NFL Drive Markov Chain
 
+[Check it out live!](https://drives.ahujapulkit.com)
+
 Uses play by play data from the NFL to model how field positions change. Modelling/computation is done in ``modelling`` with Python and the frontend is in ``frontend`` using SvelteKit.
 
 ## Modelling
