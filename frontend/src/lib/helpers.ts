@@ -12,6 +12,7 @@ export const keyToLabel = (key: string) => {
 	if (key == 'bad_fg') return 'Missed/blocked Field Goal';
 	if (key == 'made_fg') return 'Made Field Goal';
 	if (key == 'safety') return 'Safety';
+	if (key == 'turnover_on_downs') return 'Turnover on Downs';
 
 	const [down, yardsToGo, yardsFromEndZone] = stateMatcher(key);
 	return `${downToText(down)} & ${yardsToGo} ${yardsFromEndZone} yards from the end zone`;
