@@ -117,7 +117,8 @@
 	</div>
 
 	<footer class="mb-6 w-full text-center">
-		Data from 2015 - {mostRecentNFLSeason()} seasons. Check it out on <a
+		Data from 2015 - {mostRecentNFLSeason()} seasons. Check it out on
+		<a
 			href="https://github.com/pulkitahuja0/drive-markov-chain"
 			class="text-blue-400 underline hover:text-blue-600">Github.</a
 		>
