@@ -52,7 +52,7 @@ for year in range(first_szn, latest_szn + 1):
                     data[play_id]["bad_fg"] += 1
                 continue
 
-            # Check punt before fumble to mark miffed punt as punt instead of turnover
+            # Check punt before fumble to mark muffed punt as punt instead of turnover
             if play["play_type"] == "punt":
                 data[play_id]["punt"] += 1
                 continue
