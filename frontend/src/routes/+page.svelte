@@ -86,6 +86,7 @@
 								defaultValue={10}
 								step={1}
 								min={0}
+								max={99 /** 99 to make sure it remains in double digits */}
 								type="number"
 								class="w-1/10 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
 								aria-label="Yards from first down/goal"
