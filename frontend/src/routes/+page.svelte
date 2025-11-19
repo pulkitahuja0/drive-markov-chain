@@ -81,6 +81,7 @@
 							</select>
 							&
 							<!-- TODO: check if data will have & inches as 0 or 1 yards -->
+							<!-- TODO: better input validation -->
 							<input
 								bind:value={yardsToGo}
 								defaultValue={10}
