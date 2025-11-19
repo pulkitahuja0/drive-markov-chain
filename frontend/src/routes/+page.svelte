@@ -28,7 +28,7 @@
 				currClosestDistance = distance;
 				closestState = [sameDownStateYdsToGo, sameDownYardline];
 			} else if (distance == currClosestDistance) {
-				// If geometric distances is equal prefer one with closer yards to go
+				// If geometric distance is equal, prefer one with closer yards to go
 				if (Math.abs(yardsToGo - sameDownStateYdsToGo) < Math.abs(yardsToGo - closestState[0])) {
 					closestState = [sameDownStateYdsToGo, sameDownYardline];
 				}
