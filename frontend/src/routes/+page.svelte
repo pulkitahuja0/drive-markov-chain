@@ -16,20 +16,20 @@
 		const sameDownStates = Object.keys(states).filter((string) => string.startsWith(`${down}.0`));
 
 		// Find state that is closest in yards to go and yards from endzone
-		let closestState = [Infinity, Infinity];
+		let closestState = [Infinity, Infinity]; // [yardsToGo, yardline]
 		let currClosestDistance = Infinity;
 
-		sameDownStates.map((state) => {
-			const [, yardsToGo1, yardline1] = stateMatcher(state);
-			const distance = Math.sqrt((yardsToGo - yardsToGo1) ** 2 + (yardline - yardline1) ** 2);
+		sameDownStates.map((sameDownState) => {
+			const [, sameDownStateYdsToGo, sameDownYardline] = stateMatcher(sameDownState);
+			const distance = Math.sqrt((yardsToGo - sameDownStateYdsToGo) ** 2 + (yardline - sameDownYardline) ** 2);
 
 			if (distance < currClosestDistance) {
 				currClosestDistance = distance;
-				closestState = [yardsToGo1, yardline1];
+				closestState = [sameDownStateYdsToGo, sameDownYardline];
 			} else if (distance == currClosestDistance) {
-				// If geometric distances are equal prefer one with closer yards to go
-				if (Math.abs(yardsToGo - yardsToGo1) < Math.abs(yardsToGo - closestState[0])) {
-					closestState = [yardsToGo1, yardline1];
+				// If geometric distances is equal prefer one with closer yards to go
+				if (Math.abs(yardsToGo - sameDownStateYdsToGo) < Math.abs(yardsToGo - closestState[0])) {
+					closestState = [sameDownStateYdsToGo, sameDownYardline];
 				}
 			}
 		});
