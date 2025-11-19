@@ -13,6 +13,7 @@
 			return createKey(down, yardsToGo, yardline);
 		}
 
+		// Otherwise find closest state with same down
 		const sameDownStates = Object.keys(states).filter((string) => string.startsWith(`${down}.0`));
 
 		// Find state that is closest in yards to go and yards from endzone
@@ -57,13 +58,6 @@
 		currentEndStates = endStates[getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone)];
 
 		currentlyDisplaying = getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone);
-	});
-
-	// Ensure input is valid
-	$effect(() => {
-		if (yardsFromEndZone > 100) yardsFromEndZone = 99;
-		if (yardsFromEndZone < 0) yardsFromEndZone = 0;
-		if (typeof yardsFromEndZone != 'number') yardsFromEndZone = 0;
 	});
 </script>
 
