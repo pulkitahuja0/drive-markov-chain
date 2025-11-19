@@ -22,7 +22,9 @@
 
 		sameDownStates.map((sameDownState) => {
 			const [, sameDownStateYdsToGo, sameDownYardline] = stateMatcher(sameDownState);
-			const distance = Math.sqrt((yardsToGo - sameDownStateYdsToGo) ** 2 + (yardline - sameDownYardline) ** 2);
+			const distance = Math.sqrt(
+				(yardsToGo - sameDownStateYdsToGo) ** 2 + (yardline - sameDownYardline) ** 2
+			);
 
 			if (distance < currClosestDistance) {
 				currClosestDistance = distance;
@@ -87,7 +89,7 @@
 								defaultValue={10}
 								step={1}
 								min={0}
-								max={99 /** 99 to make sure it remains in double digits */}
+								max={99}
 								type="number"
 								class="w-1/10 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
 								aria-label="Yards from first down/goal"
