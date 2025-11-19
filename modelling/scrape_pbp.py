@@ -92,7 +92,7 @@ meta = {
     "first_szn": first_szn
 }
 
-with open("output/meta.json", "w+") as meta_file:
+with open("output/meta.json", "w") as meta_file:
     json.dump(meta, meta_file, separators=(",", ":"))
 
 print("Dumped meta information to output/meta.json")
