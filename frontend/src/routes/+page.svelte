@@ -26,6 +26,11 @@
 			if (distance < currClosestDistance) {
 				currClosestDistance = distance;
 				closestState = [yardsToGo1, yardline1];
+			} else if (distance == currClosestDistance) {
+				// If geometric distances are equal prefer one with closer yards to go
+				if (Math.abs(yardsToGo - yardsToGo1) < Math.abs(yardsToGo - closestState[0])) {
+					closestState = [yardsToGo1, yardline1];
+				}
 			}
 		});
 
