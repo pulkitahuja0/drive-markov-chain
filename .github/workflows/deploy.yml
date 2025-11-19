@@ -28,6 +28,7 @@ jobs:
           mkdir -p ../frontend/static/data
           cp -r output/output_all_end_prob.json ../frontend/static/data/
           cp -r output/output_all_freq.json ../frontend/static/data/
+          cp -r output/meta.json ../frontend/static/data/
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
