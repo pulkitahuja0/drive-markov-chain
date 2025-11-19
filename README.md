@@ -20,4 +20,4 @@ Every state outside of those end states is stored as a combination of the down, 
 
 This is a basic one page static frontend made with SvelteKit. It fetches the JSON data and uses it to display next play and end of drive states from a user-inputed state.
 
-For a state that is not present in the data, it will find and use a state present in the data with the same down, and closest geometrically in terms of yards to first down and yards to the end zone.
+For a state that is not present in the data, it will find and use a state present in the data with the same down, and closest geometrically in terms of yards to first down and yards to the end zone, with preference for yards to go because that is more defining in how a team may act in a situation.
