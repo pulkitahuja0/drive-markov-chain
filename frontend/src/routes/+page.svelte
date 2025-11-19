@@ -123,7 +123,7 @@
 		Data from {meta.first_szn} - {meta.latest_szn} seasons. Check it out on
 		<a
 			href="https://github.com/pulkitahuja0/drive-markov-chain"
-			class="text-blue-400 underline hover:text-blue-600">Github.</a
+			class="text-blue-400 underline hover:text-blue-600">GitHub.</a
 		>
 	</footer>
 </div>
