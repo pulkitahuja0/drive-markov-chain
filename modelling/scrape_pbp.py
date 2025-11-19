@@ -10,6 +10,8 @@ import nflreadpy as nfl
 latest_szn = most_recent_nfl_szn()
 first_szn = sys.argv[1] if len(sys.argv) > 1 else 2015
 
+# TODO: Parallelize over seasons, merge all scripts into one (only one IO operation per CI job)
+
 for year in range(first_szn, latest_szn + 1):
     pbp = nfl.load_pbp([year]).filter(~pl.col("play_type").is_in(["no_play", "kickoff", "extra_point"]))
 
