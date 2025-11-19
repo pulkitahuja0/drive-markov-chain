@@ -1,6 +1,6 @@
 <script lang="ts">
 	import DataBox from '$lib/components/DataBox.svelte';
-	import { createKey, downToText, mostRecentNFLSeason, stateMatcher } from '$lib/helpers.js';
+	import { createKey, downToText, stateMatcher } from '$lib/helpers.js';
 
 	const getKey = (
 		states: Record<string, Record<string, number>>,
@@ -13,19 +13,27 @@
 			return createKey(down, yardsToGo, yardline);
 		}
 
+		// Otherwise find closest state with same down
 		const sameDownStates = Object.keys(states).filter((string) => string.startsWith(`${down}.0`));
 
 		// Find state that is closest in yards to go and yards from endzone
-		let closestState = [Infinity, Infinity];
+		let closestState = [Infinity, Infinity]; // [yardsToGo, yardline]
 		let currClosestDistance = Infinity;
 
-		sameDownStates.map((state) => {
-			const [, yardsToGo1, yardline1] = stateMatcher(state);
-			const distance = Math.sqrt((yardsToGo - yardsToGo1) ** 2 + (yardline - yardline1) ** 2);
+		sameDownStates.map((sameDownState) => {
+			const [, sameDownStateYdsToGo, sameDownYardline] = stateMatcher(sameDownState);
+			const distance = Math.sqrt(
+				(yardsToGo - sameDownStateYdsToGo) ** 2 + (yardline - sameDownYardline) ** 2
+			);
 
 			if (distance < currClosestDistance) {
 				currClosestDistance = distance;
-				closestState = [yardsToGo1, yardline1];
+				closestState = [sameDownStateYdsToGo, sameDownYardline];
+			} else if (distance === currClosestDistance) {
+				// If geometric distance is equal, prefer one with closer yards to go
+				if (Math.abs(yardsToGo - sameDownStateYdsToGo) < Math.abs(yardsToGo - closestState[0])) {
+					closestState = [sameDownStateYdsToGo, sameDownYardline];
+				}
 			}
 		});
 
@@ -39,6 +47,7 @@
 	let { data } = $props();
 	const nextPlayStates = data.freqs;
 	const endStates = data.endStates;
+	const { meta } = data;
 
 	let currentNextPlayStates = $state({});
 	let currentEndStates = $state({});
@@ -52,13 +61,6 @@
 		currentEndStates = endStates[getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone)];
 
 		currentlyDisplaying = getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone);
-	});
-
-	// Ensure input is valid
-	$effect(() => {
-		if (yardsFromEndZone > 100) yardsFromEndZone = 99;
-		if (yardsFromEndZone < 0) yardsFromEndZone = 0;
-		if (typeof yardsFromEndZone != 'number') yardsFromEndZone = 0;
 	});
 </script>
 
@@ -80,10 +82,14 @@
 								<option value={4}>4th</option>
 							</select>
 							&
+							<!-- TODO: check if data will have & inches as 0 or 1 yards -->
+							<!-- TODO: better input validation -->
 							<input
 								bind:value={yardsToGo}
 								defaultValue={10}
 								step={1}
+								min={0}
+								max={99}
 								type="number"
 								class="w-1/10 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
 								aria-label="Yards from first down/goal"
@@ -110,17 +116,17 @@
 			<div class="m-6 text-center text-lg text-red-500">
 				Displaying {downToText(down)} & {(() => {
 					const [, y, y2] = stateMatcher(currentlyDisplaying);
-					return `${y} ${y2} yards from the end zone.`;
+					return `${y} ${y2} yards from the end zone`;
 				})()}
 			</div>
 		{/if}
 	</div>
 
 	<footer class="mb-6 w-full text-center">
-		Data from 2015 - {mostRecentNFLSeason()} seasons. Check it out on
+		Data from {meta.first_szn} - {meta.latest_szn} seasons. Check it out on
 		<a
 			href="https://github.com/pulkitahuja0/drive-markov-chain"
-			class="text-blue-400 underline hover:text-blue-600">Github.</a
+			class="text-blue-400 underline hover:text-blue-600">GitHub.</a
 		>
 	</footer>
 </div>

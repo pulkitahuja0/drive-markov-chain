@@ -8,7 +8,9 @@ import polars as pl
 import nflreadpy as nfl
 
 latest_szn = most_recent_nfl_szn()
-first_szn = sys.argv[1] if len(sys.argv) > 1 else 2015
+first_szn = int(sys.argv[1]) if len(sys.argv) > 1 else 2015
+
+# TODO: Parallelize over seasons, merge all scripts into one (only one IO operation per CI job)
 
 for year in range(first_szn, latest_szn + 1):
     pbp = nfl.load_pbp([year]).filter(~pl.col("play_type").is_in(["no_play", "kickoff", "extra_point"]))
@@ -84,3 +86,13 @@ for year in range(first_szn, latest_szn + 1):
         json.dump(data, json_file, separators=(",", ":"))
 
     print(f"Dumped {len(data.keys())} play by play data state transitions from the {year} season.")
+
+meta = {
+    "latest_szn": latest_szn,
+    "first_szn": first_szn
+}
+
+with open("output/meta.json", "w") as meta_file:
+    json.dump(meta, meta_file, separators=(",", ":"))
+
+print("Dumped meta information to output/meta.json")
