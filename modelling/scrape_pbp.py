@@ -8,7 +8,7 @@ import polars as pl
 import nflreadpy as nfl
 
 latest_szn = most_recent_nfl_szn()
-first_szn = sys.argv[1] if len(sys.argv) > 1 else 2015
+first_szn = int(sys.argv[1]) if len(sys.argv) > 1 else 2015
 
 # TODO: Parallelize over seasons, merge all scripts into one (only one IO operation per CI job)
 
