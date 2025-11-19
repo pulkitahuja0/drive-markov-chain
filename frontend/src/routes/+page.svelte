@@ -80,10 +80,12 @@
 								<option value={4}>4th</option>
 							</select>
 							&
+							<!-- TODO: check if data will have & inches as 0 or 1 yards -->
 							<input
 								bind:value={yardsToGo}
 								defaultValue={10}
 								step={1}
+								min={0}
 								type="number"
 								class="w-1/10 rounded-lg border border-gray-400 bg-gray-50 p-1 text-center focus:border-gray-400"
 								aria-label="Yards from first down/goal"
