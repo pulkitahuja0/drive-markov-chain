@@ -86,3 +86,13 @@ for year in range(first_szn, latest_szn + 1):
         json.dump(data, json_file, separators=(",", ":"))
 
     print(f"Dumped {len(data.keys())} play by play data state transitions from the {year} season.")
+
+meta = {
+    "latest_szn": latest_szn,
+    "first_szn": first_szn
+}
+
+with open("output/meta.json", "w+") as meta_file:
+    json.dump(meta, meta_file, separators=(",", ":"))
+
+print("Dumped meta information to output/meta.json")

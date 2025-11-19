@@ -27,3 +27,4 @@ print("Merged all seasons relative frequencies in output_all_freq.json")
 
 print("Merged all seasons frequencies in output_all.json")"""
 print(f"Total of {len(merged_data.keys())} transient states")
+
