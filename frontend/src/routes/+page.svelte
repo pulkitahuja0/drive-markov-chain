@@ -113,7 +113,7 @@
 			<div class="m-6 text-center text-lg text-red-500">
 				Displaying {downToText(down)} & {(() => {
 					const [, y, y2] = stateMatcher(currentlyDisplaying);
-					return `${y} ${y2} yards from the end zone.`;
+					return `${y} ${y2} yards from the end zone`;
 				})()}
 			</div>
 		{/if}
