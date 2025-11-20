@@ -31,11 +31,11 @@
 	});
 
 	$effect(() => {
-		yardsToGo = `${Math.min(99, Math.max(0, yardsToGoNum))}`;
+		yardsToGo = `${Math.min(99, Math.max(0, isNaN(yardsToGoNum) ? 0 : yardsToGoNum))}`;
 	});
 
 	$effect(() => {
-		yardsFromEndZone = `${Math.min(99, Math.max(0, yardsFromEndZoneNum))}`;
+		yardsFromEndZone = `${Math.min(99, Math.max(0, isNaN(yardsFromEndZoneNum) ? 0 : yardsFromEndZoneNum))}`;
 	});
 </script>
 
