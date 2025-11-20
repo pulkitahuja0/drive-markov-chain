@@ -58,6 +58,7 @@
 							</select>
 							&
 							<!-- TODO: check if data will have & inches as 0 or 1 yards -->
+							<!-- TODO: change 0EXX or X-XX number-like values as 0 -->
 							<input
 								bind:value={yardsToGo}
 								defaultValue={10}
