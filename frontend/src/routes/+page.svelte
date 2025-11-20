@@ -26,6 +26,7 @@
 
 		currentlyDisplaying = getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone);
 	});
+
 </script>
 
 <div class="flex min-h-screen flex-col">
@@ -47,7 +48,6 @@
 							</select>
 							&
 							<!-- TODO: check if data will have & inches as 0 or 1 yards -->
-							<!-- TODO: turn 0e or like 0-XX into 0 -->
 							<input
 								value={yardsToGo}
 								oninput={(e: Event) => {
