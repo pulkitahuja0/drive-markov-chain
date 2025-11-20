@@ -62,6 +62,14 @@
 
 		currentlyDisplaying = getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone);
 	});
+
+	$effect(() => {
+		yardsToGo = Math.min(99, Math.max(0, yardsToGo));
+	});
+
+	$effect(() => {
+		yardsFromEndZone = Math.min(99, Math.max(0, yardsFromEndZone));
+	});
 </script>
 
 <div class="flex min-h-screen flex-col">
