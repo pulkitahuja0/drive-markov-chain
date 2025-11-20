@@ -1,48 +1,15 @@
 <script lang="ts">
 	import DataBox from '$lib/components/DataBox.svelte';
-	import { createKey, downToText, stateMatcher } from '$lib/helpers.js';
+	import { createKey, downToText, getKey, stateMatcher } from '$lib/helpers.js';
 
-	const getKey = (
-		states: Record<string, Record<string, number>>,
-		down: number,
-		yardsToGo: number,
-		yardline: number
-	) => {
-		// If state is already present in data, use it
-		if (states.hasOwnProperty(createKey(down, yardsToGo, yardline))) {
-			return createKey(down, yardsToGo, yardline);
-		}
-
-		// Otherwise find closest state with same down
-		const sameDownStates = Object.keys(states).filter((string) => string.startsWith(`${down}.0`));
-
-		// Find state that is closest in yards to go and yards from endzone
-		let closestState = [Infinity, Infinity]; // [yardsToGo, yardline]
-		let currClosestDistance = Infinity;
-
-		sameDownStates.map((sameDownState) => {
-			const [, sameDownStateYdsToGo, sameDownYardline] = stateMatcher(sameDownState);
-			const distance = Math.sqrt(
-				(yardsToGo - sameDownStateYdsToGo) ** 2 + (yardline - sameDownYardline) ** 2
-			);
-
-			if (distance < currClosestDistance) {
-				currClosestDistance = distance;
-				closestState = [sameDownStateYdsToGo, sameDownYardline];
-			} else if (distance === currClosestDistance) {
-				// If geometric distance is equal, prefer one with closer yards to go
-				if (Math.abs(yardsToGo - sameDownStateYdsToGo) < Math.abs(yardsToGo - closestState[0])) {
-					closestState = [sameDownStateYdsToGo, sameDownYardline];
-				}
-			}
-		});
-
-		return createKey(down, closestState[0], closestState[1]);
-	};
+	// Use string representations for inputs to remove leading zeroes
+	let yardsToGo = $state('10');
+	let yardsFromEndZone = $state('75');
 
 	let down = $state(1);
-	let yardsToGo = $state(10);
-	let yardsFromEndZone = $state(75);
+	// Number derivations for calculations and lookup
+	let yardsToGoNum = $derived.by(() => +yardsToGo);
+	let yardsFromEndZoneNum = $derived.by(() => +yardsFromEndZone);
 
 	let { data } = $props();
 	const nextPlayStates = data.freqs;
@@ -57,10 +24,18 @@
 
 	$effect(() => {
 		currentNextPlayStates =
-			nextPlayStates[getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone)];
-		currentEndStates = endStates[getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone)];
+			nextPlayStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)];
+		currentEndStates = endStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)];
 
-		currentlyDisplaying = getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone);
+		currentlyDisplaying = getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum);
+	});
+
+	$effect(() => {
+		yardsToGo = `${Math.min(99, Math.max(0, isNaN(yardsToGoNum) ? 0 : yardsToGoNum))}`;
+	});
+
+	$effect(() => {
+		yardsFromEndZone = `${Math.min(99, Math.max(0, isNaN(yardsFromEndZoneNum) ? 0 : yardsFromEndZoneNum))}`;
 	});
 </script>
 
@@ -83,7 +58,7 @@
 							</select>
 							&
 							<!-- TODO: check if data will have & inches as 0 or 1 yards -->
-							<!-- TODO: better input validation -->
+							<!-- TODO: change 0EXX or X-XX number-like values as 0 -->
 							<input
 								bind:value={yardsToGo}
 								defaultValue={10}
@@ -112,7 +87,7 @@
 			</div>
 		{/if}
 
-		{#if currentlyDisplaying !== createKey(down, yardsToGo, yardsFromEndZone)}
+		{#if currentlyDisplaying !== createKey(down, yardsToGoNum, yardsFromEndZoneNum)}
 			<div class="m-6 text-center text-lg text-red-500">
 				Displaying {downToText(down)} & {(() => {
 					const [, y, y2] = stateMatcher(currentlyDisplaying);
