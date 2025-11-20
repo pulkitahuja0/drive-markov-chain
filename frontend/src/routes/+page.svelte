@@ -2,14 +2,12 @@
 	import DataBox from '$lib/components/DataBox.svelte';
 	import { createKey, downToText, getKey, stateMatcher } from '$lib/helpers.js';
 
-	// Use string representations for inputs to remove leading zeroes
-	let yardsToGo = $state('10');
-	let yardsFromEndZone = $state('75');
+	// Use numeric states for inputs; inputs will update these via on:input
+	let yardsToGo = $state(10);
+	let yardsFromEndZone = $state(75);
 
 	let down = $state(1);
-	// Number derivations for calculations and lookup
-	let yardsToGoNum = $derived.by(() => +yardsToGo);
-	let yardsFromEndZoneNum = $derived.by(() => +yardsFromEndZone);
+	// Number derivations for calculations and lookup (now passthroughs)
 
 	let { data } = $props();
 	const nextPlayStates = data.freqs;
@@ -24,19 +22,12 @@
 
 	$effect(() => {
 		currentNextPlayStates =
-			nextPlayStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)];
-		currentEndStates = endStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)];
+			nextPlayStates[getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone)];
+		currentEndStates = endStates[getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone)];
 
-		currentlyDisplaying = getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum);
+		currentlyDisplaying = getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone);
 	});
 
-	$effect(() => {
-		yardsToGo = `${Math.min(99, Math.max(0, yardsToGoNum))}`;
-	});
-
-	$effect(() => {
-		yardsFromEndZone = `${Math.min(99, Math.max(0, yardsFromEndZoneNum))}`;
-	});
 </script>
 
 <div class="flex min-h-screen flex-col">
@@ -59,7 +50,12 @@
 							&
 							<!-- TODO: check if data will have & inches as 0 or 1 yards -->
 							<input
-								bind:value={yardsToGo}
+								value={yardsToGo}
+								oninput={(e: Event) => {
+									const raw = (e.target as HTMLInputElement).value;
+									const parsed = +raw;
+									yardsToGo = Math.min(99, Math.max(0, parsed));
+								}}
 								defaultValue={10}
 								step={1}
 								min={0}
@@ -69,7 +65,12 @@
 								aria-label="Yards from first down/goal"
 							/>
 							<input
-								bind:value={yardsFromEndZone}
+								value={yardsFromEndZone}
+								oninput={(e: Event) => {
+									const raw = (e.target as HTMLInputElement).value;
+									const parsed = +raw;
+									yardsFromEndZone = Math.min(99, Math.max(0, parsed));
+								}}
 								defaultValue={75}
 								type="number"
 								min={0}
@@ -86,7 +87,7 @@
 			</div>
 		{/if}
 
-		{#if currentlyDisplaying !== createKey(down, yardsToGoNum, yardsFromEndZoneNum)}
+		{#if currentlyDisplaying !== createKey(down, yardsToGo, yardsFromEndZone)}
 			<div class="m-6 text-center text-lg text-red-500">
 				Displaying {downToText(down)} & {(() => {
 					const [, y, y2] = stateMatcher(currentlyDisplaying);
