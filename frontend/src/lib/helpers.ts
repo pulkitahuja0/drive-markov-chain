@@ -34,3 +34,41 @@ export const stateMatcher = (key: string) => {
 export const createKey = (down: number, yardsToGo: number, yardline: number) => {
 	return `${down}.0_${yardsToGo}.0_${yardline}.0`;
 };
+
+export const getKey = (
+	states: Record<string, Record<string, number>>,
+	down: number,
+	yardsToGo: number,
+	yardline: number
+) => {
+	// If state is already present in data, use it
+	if (states.hasOwnProperty(createKey(down, yardsToGo, yardline))) {
+		return createKey(down, yardsToGo, yardline);
+	}
+
+	// Otherwise find closest state with same down
+	const sameDownStates = Object.keys(states).filter((string) => string.startsWith(`${down}.0`));
+
+	// Find state that is closest in yards to go and yards from endzone
+	let closestState = [Infinity, Infinity]; // [yardsToGo, yardline]
+	let currClosestDistance = Infinity;
+
+	sameDownStates.map((sameDownState) => {
+		const [, sameDownStateYdsToGo, sameDownYardline] = stateMatcher(sameDownState);
+		const distance = Math.sqrt(
+			(yardsToGo - sameDownStateYdsToGo) ** 2 + (yardline - sameDownYardline) ** 2
+		);
+
+		if (distance < currClosestDistance) {
+			currClosestDistance = distance;
+			closestState = [sameDownStateYdsToGo, sameDownYardline];
+		} else if (distance === currClosestDistance) {
+			// If geometric distance is equal, prefer one with closer yards to go
+			if (Math.abs(yardsToGo - sameDownStateYdsToGo) < Math.abs(yardsToGo - closestState[0])) {
+				closestState = [sameDownStateYdsToGo, sameDownYardline];
+			}
+		}
+	});
+
+	return createKey(down, closestState[0], closestState[1]);
+};
