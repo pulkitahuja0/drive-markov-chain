@@ -53,7 +53,7 @@ export const getKey = (
 	let closestState = [Infinity, Infinity]; // [yardsToGo, yardline]
 	let currClosestDistance = Infinity;
 
-	sameDownStates.map((sameDownState) => {
+	sameDownStates.forEach((sameDownState) => {
 		const [, sameDownStateYdsToGo, sameDownYardline] = stateMatcher(sameDownState);
 		const distance = Math.sqrt(
 			(yardsToGo - sameDownStateYdsToGo) ** 2 + (yardline - sameDownYardline) ** 2
