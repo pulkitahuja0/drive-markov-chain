@@ -2,12 +2,11 @@
 	import DataBox from '$lib/components/DataBox.svelte';
 	import { createKey, downToText, getKey, stateMatcher } from '$lib/helpers.js';
 
-	// Use numeric states for inputs; inputs will update these via on:input
+	// Use numeric states for inputs; inputs will update these via oninput
 	let yardsToGo = $state(10);
 	let yardsFromEndZone = $state(75);
 
 	let down = $state(1);
-	// Number derivations for calculations and lookup (now passthroughs)
 
 	let { data } = $props();
 	const nextPlayStates = data.freqs;
@@ -52,9 +51,8 @@
 							<input
 								value={yardsToGo}
 								oninput={(e: Event) => {
-									const raw = (e.target as HTMLInputElement).value;
-									const parsed = +raw;
-									yardsToGo = Math.min(99, Math.max(0, parsed));
+									const value = +(e.target as HTMLInputElement).value;
+									yardsToGo = Math.min(99, Math.max(0, value));
 								}}
 								defaultValue={10}
 								step={1}
@@ -67,9 +65,8 @@
 							<input
 								value={yardsFromEndZone}
 								oninput={(e: Event) => {
-									const raw = (e.target as HTMLInputElement).value;
-									const parsed = +raw;
-									yardsFromEndZone = Math.min(99, Math.max(0, parsed));
+									const value = +(e.target as HTMLInputElement).value;
+									yardsFromEndZone = Math.min(99, Math.max(0, value));
 								}}
 								defaultValue={75}
 								type="number"
