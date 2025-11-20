@@ -8,8 +8,8 @@
 
 	let down = $state(1);
 	// Number derivations for calculations and lookup
-	let yardsToGoNum = $derived.by(() => parseInt(yardsToGo));
-	let yardsFromEndZoneNum = $derived.by(() => parseInt(yardsFromEndZone));
+	let yardsToGoNum = $derived.by(() => +yardsToGo);
+	let yardsFromEndZoneNum = $derived.by(() => +yardsFromEndZone);
 
 	let { data } = $props();
 	const nextPlayStates = data.freqs;
