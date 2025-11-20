@@ -2,10 +2,12 @@
 	import DataBox from '$lib/components/DataBox.svelte';
 	import { createKey, downToText, getKey, stateMatcher } from '$lib/helpers.js';
 
+	let yardsToGo = $state("10");
+	let yardsFromEndZone = $state("75");
 
 	let down = $state(1);
-	let yardsToGo = $state(10);
-	let yardsFromEndZone = $state(75);
+	let yardsToGoNum = $derived.by(() => parseInt(yardsToGo));
+	let yardsFromEndZoneNum = $derived.by(() => parseInt(yardsFromEndZone));
 
 	let { data } = $props();
 	const nextPlayStates = data.freqs;
@@ -20,18 +22,18 @@
 
 	$effect(() => {
 		currentNextPlayStates =
-			nextPlayStates[getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone)];
-		currentEndStates = endStates[getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone)];
+			nextPlayStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)];
+		currentEndStates = endStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)];
 
-		currentlyDisplaying = getKey(nextPlayStates, down, yardsToGo, yardsFromEndZone);
+		currentlyDisplaying = getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum);
 	});
 
 	$effect(() => {
-		yardsToGo = Math.min(99, Math.max(0, yardsToGo));
+		yardsToGo = `${Math.min(99, Math.max(0, yardsToGoNum))}`;
 	});
 
 	$effect(() => {
-		yardsFromEndZone = Math.min(99, Math.max(0, yardsFromEndZone));
+		yardsFromEndZone = `${Math.min(99, Math.max(0, yardsFromEndZoneNum))}`;
 	});
 </script>
 
@@ -83,7 +85,7 @@
 			</div>
 		{/if}
 
-		{#if currentlyDisplaying !== createKey(down, yardsToGo, yardsFromEndZone)}
+		{#if currentlyDisplaying !== createKey(down, yardsToGoNum, yardsFromEndZoneNum)}
 			<div class="m-6 text-center text-lg text-red-500">
 				Displaying {downToText(down)} & {(() => {
 					const [, y, y2] = stateMatcher(currentlyDisplaying);
