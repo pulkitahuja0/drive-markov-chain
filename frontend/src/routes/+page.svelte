@@ -3,8 +3,8 @@
 	import { createKey, downToText, getKey, stateMatcher } from '$lib/helpers.js';
 
 	// Use string representations for inputs to remove leading zeroes
-	let yardsToGo = $state("10");
-	let yardsFromEndZone = $state("75");
+	let yardsToGo = $state('10');
+	let yardsFromEndZone = $state('75');
 
 	let down = $state(1);
 	// Number derivations for calculations and lookup
