@@ -12,5 +12,3 @@ export const load: PageLoad = async ({ fetch }) => {
 		meta
 	};
 };
-
-export const prerender = true;
