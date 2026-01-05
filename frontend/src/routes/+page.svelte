@@ -12,12 +12,18 @@
 	let yardsFromEndZoneNum = $derived.by(() => +yardsFromEndZone);
 
 	let { data } = $props();
+
 	const nextPlayStates = data.freqs;
 	const endStates = data.endStates;
+	const nCounts = data.nCounts;
 	const { meta } = data;
 
 	let currentNextPlayStates = $state({});
 	let currentEndStates = $state({});
+	let nCount = $derived.by(() => {
+		const key = getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum);
+		return nCounts[key] || 0;
+	});
 
 	// Variable to help track if using closest state instead of direct state
 	let currentlyDisplaying = $state('1.0_10.0_75.0');
@@ -81,8 +87,8 @@
 							/> yards from the end zone.
 						</div>
 					</div>
-					<DataBox label={'Next play/position probabilities:'} bind:data={currentNextPlayStates} />
-					<DataBox label={'End of drive probabilities:'} bind:data={currentEndStates} />
+					<DataBox label={'Next play/position probabilities'} bind:data={currentNextPlayStates} bind:n={nCount} />
+					<DataBox label={'End of drive probabilities'} bind:data={currentEndStates} bind:n={nCount} />
 				</div>
 			</div>
 		{/if}
