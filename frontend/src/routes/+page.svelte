@@ -84,8 +84,16 @@
 							/> yards from the end zone.
 						</div>
 					</div>
-					<DataBox label={'Next play/position probabilities'} bind:data={currentNextPlayStates} bind:n={nCount} />
-					<DataBox label={'End of drive probabilities'} bind:data={currentEndStates} bind:n={nCount} />
+					<DataBox
+						label={'Next play/position probabilities'}
+						bind:data={currentNextPlayStates}
+						bind:n={nCount}
+					/>
+					<DataBox
+						label={'End of drive probabilities'}
+						bind:data={currentEndStates}
+						bind:n={nCount}
+					/>
 				</div>
 			</div>
 		{/if}
