@@ -24,7 +24,7 @@
 
 <div class="self-start border-2 border-black">
 	<div class="m-3">
-		<div class="text-lg">{label} (N = {n}):</div>
+		<div class="text-lg">{label} (<i>N</i> = {n}):</div>
 		<ul>
 			{#each top10 as item}
 				<li>
