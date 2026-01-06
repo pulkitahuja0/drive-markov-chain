@@ -13,10 +13,7 @@
 
 	let { data } = $props();
 
-	const nextPlayStates = data.freqs;
-	const endStates = data.endStates;
-	const nCounts = data.nCounts;
-	const { meta } = data;
+	const { meta, nextPlayStates, endStates, nCounts } = data;
 
 	let currentNextPlayStates = $state({});
 	let currentEndStates = $state({});
