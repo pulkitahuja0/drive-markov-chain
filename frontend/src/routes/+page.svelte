@@ -15,8 +15,8 @@
 
 	const { meta, nextPlayStates, endStates, nCounts } = data;
 
-	let currentNextPlayStates = $state({});
-	let currentEndStates = $state({});
+	let currentNextPlayStates = $state(data.currentNextPlayStates);
+	let currentEndStates = $state(data.currentEndStates);
 	let nCount = $derived.by(() => {
 		const key = getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum);
 		return nCounts[key] || 0;
