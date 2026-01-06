@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { keyToLabel } from '$lib/helpers';
 
-	let { label, data = $bindable() } = $props();
+	let { label, data = $bindable(), n = $bindable() } = $props();
 
 	// Slices the top 10 next states by probability to display
 	let top10 = $derived.by(() => {
@@ -24,7 +24,7 @@
 
 <div class="self-start border-2 border-black">
 	<div class="m-3">
-		<div class="text-lg">{label}</div>
+		<div class="text-lg">{label} (<i>N</i> = {n}):</div>
 		<ul>
 			{#each top10 as item}
 				<li>
