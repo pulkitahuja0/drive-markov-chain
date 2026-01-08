@@ -2,6 +2,8 @@
 	import DataBox from '$lib/components/DataBox.svelte';
 	import { createKey, downToText, getKey, stateMatcher } from '$lib/helpers.js';
 
+	const clamp = (n: number) => Math.min(99, Math.max(0, isNaN(n) ? 0 : n));
+
 	// Use string representations for inputs to remove leading zeroes
 	let yardsToGoRaw = $state('10');
 	let yardsFromEndZoneRaw = $state('75');
@@ -26,29 +28,25 @@
 		}
 	};
 
-	const clamp = (n: number) => Math.min(99, Math.max(0, isNaN(n) ? 0 : n));
 
 	let { data } = $props();
 
 	const { meta, nextPlayStates, endStates, nCounts } = data;
 
-	const currentNextPlayStates = $derived.by(
-		() => nextPlayStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)]
-	);
-
-	const currentEndStates = $derived.by(
-		() => endStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)]
-	);
-
-	const nCount = $derived.by(() => {
-		const key = getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum);
-		return nCounts[key] || 0;
-	});
-
-	// Variable to help track if using closest state instead of direct state
-	const currentlyDisplaying = $derived.by(() =>
+	// Variable to help track if using closest state instead of direct state AND hold current key
+	const currentlyDisplaying = $derived(
 		getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)
 	);
+
+	const currentNextPlayStates = $derived(
+		nextPlayStates[currentlyDisplaying]
+	);
+
+	const currentEndStates = $derived(
+		endStates[currentlyDisplaying]
+	);
+
+	const nCount = $derived(nCounts[currentlyDisplaying] || 0);
 </script>
 
 <div class="flex min-h-screen flex-col">
