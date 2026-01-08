@@ -43,7 +43,7 @@ export const getKey = (
 ) => {
 	// If state is already present in data, use it
 	if (states.hasOwnProperty(createKey(down, yardsToGo, yardline))) {
-		return createKey(down, yardsToGo, yardline);
+		return { key: createKey(down, yardsToGo, yardline), yardsToGo, yardline };
 	}
 
 	// Otherwise find closest state with same down
@@ -70,5 +70,9 @@ export const getKey = (
 		}
 	});
 
-	return createKey(down, closestState[0], closestState[1]);
+	return {
+		key: createKey(down, closestState[0], closestState[1]),
+		yardsToGo: closestState[0],
+		yardline: closestState[1]
+	};
 };

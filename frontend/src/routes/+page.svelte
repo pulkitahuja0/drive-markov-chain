@@ -33,15 +33,15 @@
 	const { meta, nextPlayStates, endStates, nCounts } = data;
 
 	// Variable to help track if using closest state instead of direct state AND hold current key
-	const currentlyDisplaying = $derived(
+	const {key: currKey, yardsToGo: currYardsToGo, yardline: currYardsFromEndZone } = $derived(
 		getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)
 	);
 
-	const currentNextPlayStates = $derived(nextPlayStates[currentlyDisplaying]);
+	const currentNextPlayStates = $derived(nextPlayStates[currKey]);
 
-	const currentEndStates = $derived(endStates[currentlyDisplaying]);
+	const currentEndStates = $derived(endStates[currKey]);
 
-	const nCount = $derived(nCounts[currentlyDisplaying] || 0);
+	const nCount = $derived(nCounts[currKey] || 0);
 </script>
 
 <div class="flex min-h-screen flex-col">
@@ -63,7 +63,6 @@
 							</select>
 							&
 							<!-- TODO: check if data will have & inches as 0 or 1 yards -->
-							<!-- TODO: change 0EXX or X-XX number-like values as 0 -->
 							<input
 								bind:value={values.yardsToGo}
 								defaultValue={10}
@@ -96,12 +95,9 @@
 			</div>
 		{/if}
 
-		{#if currentlyDisplaying !== createKey(down, yardsToGoNum, yardsFromEndZoneNum)}
+		{#if currKey !== createKey(down, yardsToGoNum, yardsFromEndZoneNum)}
 			<div class="m-6 text-center text-lg text-red-500">
-				Displaying {downToText(down)} & {(() => {
-					const [, y, y2] = stateMatcher(currentlyDisplaying);
-					return `${y} ${y2} yards from the end zone`;
-				})()}
+				Displaying {downToText(down)} & {currYardsToGo} {currYardsFromEndZone} yards from the end zone
 			</div>
 		{/if}
 	</div>
