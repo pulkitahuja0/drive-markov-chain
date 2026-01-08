@@ -1,6 +1,6 @@
 <script lang="ts">
 	import DataBox from '$lib/components/DataBox.svelte';
-	import { createKey, downToText, getKey, stateMatcher } from '$lib/helpers.js';
+	import { createKey, downToText, getKey } from '$lib/helpers.js';
 
 	const clamp = (n: number) => Math.min(99, Math.max(0, isNaN(n) ? 0 : n));
 
