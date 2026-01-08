@@ -33,9 +33,11 @@
 	const { meta, nextPlayStates, endStates, nCounts } = data;
 
 	// Get the closest matching state key
-	const {key: currKey, yardsToGo: currYardsToGo, yardline: currYardsFromEndZone } = $derived(
-		getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)
-	);
+	const {
+		key: currKey,
+		yardsToGo: currYardsToGo,
+		yardline: currYardsFromEndZone
+	} = $derived(getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum));
 
 	const currentNextPlayStates = $derived(nextPlayStates[currKey]);
 
@@ -97,7 +99,8 @@
 
 		{#if currKey !== createKey(down, yardsToGoNum, yardsFromEndZoneNum)}
 			<div class="m-6 text-center text-lg text-red-500">
-				Displaying {downToText(down)} & {currYardsToGo} {currYardsFromEndZone} yards from the end zone
+				Displaying {downToText(down)} & {currYardsToGo}
+				{currYardsFromEndZone} yards from the end zone
 			</div>
 		{/if}
 	</div>
