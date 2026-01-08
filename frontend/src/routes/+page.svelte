@@ -32,7 +32,7 @@
 
 	const { meta, nextPlayStates, endStates, nCounts } = data;
 
-	// Variable to help track if using closest state instead of direct state AND hold current key
+	// Get the closest matching state key
 	const {key: currKey, yardsToGo: currYardsToGo, yardline: currYardsFromEndZone } = $derived(
 		getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)
 	);
