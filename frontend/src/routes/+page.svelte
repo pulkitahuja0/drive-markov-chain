@@ -10,8 +10,8 @@
 
 	let down = $state(1);
 	// Number derivations for calculations and lookup
-	const yardsToGoNum = $derived.by(() => +yardsToGoRaw);
-	const yardsFromEndZoneNum = $derived.by(() => +yardsFromEndZoneRaw);
+	const yardsToGoNum = $derived(+yardsToGoRaw);
+	const yardsFromEndZoneNum = $derived(+yardsFromEndZoneRaw);
 
 	const values = {
 		get yardsToGo() {
