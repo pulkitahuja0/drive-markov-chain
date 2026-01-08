@@ -28,7 +28,6 @@
 		}
 	};
 
-
 	let { data } = $props();
 
 	const { meta, nextPlayStates, endStates, nCounts } = data;
@@ -38,13 +37,9 @@
 		getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)
 	);
 
-	const currentNextPlayStates = $derived(
-		nextPlayStates[currentlyDisplaying]
-	);
+	const currentNextPlayStates = $derived(nextPlayStates[currentlyDisplaying]);
 
-	const currentEndStates = $derived(
-		endStates[currentlyDisplaying]
-	);
+	const currentEndStates = $derived(endStates[currentlyDisplaying]);
 
 	const nCount = $derived(nCounts[currentlyDisplaying] || 0);
 </script>
