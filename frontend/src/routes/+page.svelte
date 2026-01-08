@@ -15,23 +15,17 @@
 
 	const { meta, nextPlayStates, endStates, nCounts } = data;
 
-	let currentNextPlayStates = $state(data.currentNextPlayStates);
-	let currentEndStates = $state(data.currentEndStates);
+	let currentNextPlayStates = $derived.by(() => nextPlayStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)]);
+
+	let currentEndStates = $derived.by(() => endStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)]);
+
 	let nCount = $derived.by(() => {
 		const key = getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum);
 		return nCounts[key] || 0;
 	});
 
 	// Variable to help track if using closest state instead of direct state
-	let currentlyDisplaying = $state('1.0_10.0_75.0');
-
-	$effect(() => {
-		currentNextPlayStates =
-			nextPlayStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)];
-		currentEndStates = endStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)];
-
-		currentlyDisplaying = getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum);
-	});
+	let currentlyDisplaying = $derived.by(() => getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum));
 
 	$effect(() => {
 		yardsToGo = `${Math.min(99, Math.max(0, isNaN(yardsToGoNum) ? 0 : yardsToGoNum))}`;
@@ -86,13 +80,13 @@
 					</div>
 					<DataBox
 						label={'Next play/position probabilities'}
-						bind:data={currentNextPlayStates}
-						bind:n={nCount}
+						data={currentNextPlayStates}
+						n={nCount}
 					/>
 					<DataBox
 						label={'End of drive probabilities'}
-						bind:data={currentEndStates}
-						bind:n={nCount}
+						data={currentEndStates}
+						n={nCount}
 					/>
 				</div>
 			</div>
