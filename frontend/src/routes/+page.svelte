@@ -24,7 +24,7 @@
 		set yardsFromEndZone(val: string) {
 			yardsFromEndZoneRaw = val;
 		}
-	}
+	};
 
 	const clamp = (n: number) => Math.min(99, Math.max(0, isNaN(n) ? 0 : n));
 
@@ -32,9 +32,13 @@
 
 	const { meta, nextPlayStates, endStates, nCounts } = data;
 
-	const currentNextPlayStates = $derived.by(() => nextPlayStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)]);
+	const currentNextPlayStates = $derived.by(
+		() => nextPlayStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)]
+	);
 
-	const currentEndStates = $derived.by(() => endStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)]);
+	const currentEndStates = $derived.by(
+		() => endStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)]
+	);
 
 	const nCount = $derived.by(() => {
 		const key = getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum);
@@ -42,7 +46,9 @@
 	});
 
 	// Variable to help track if using closest state instead of direct state
-	const currentlyDisplaying = $derived.by(() => getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum));
+	const currentlyDisplaying = $derived.by(() =>
+		getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)
+	);
 </script>
 
 <div class="flex min-h-screen flex-col">
@@ -92,11 +98,7 @@
 						data={currentNextPlayStates}
 						n={nCount}
 					/>
-					<DataBox
-						label={'End of drive probabilities'}
-						data={currentEndStates}
-						n={nCount}
-					/>
+					<DataBox label={'End of drive probabilities'} data={currentEndStates} n={nCount} />
 				</div>
 			</div>
 		{/if}
