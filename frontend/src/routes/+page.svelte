@@ -8,8 +8,8 @@
 
 	let down = $state(1);
 	// Number derivations for calculations and lookup
-	let yardsToGoNum = $derived.by(() => +yardsToGoRaw);
-	let yardsFromEndZoneNum = $derived.by(() => +yardsFromEndZoneRaw);
+	const yardsToGoNum = $derived.by(() => +yardsToGoRaw);
+	const yardsFromEndZoneNum = $derived.by(() => +yardsFromEndZoneRaw);
 
 	const values = {
 		get yardsToGo() {
@@ -32,17 +32,17 @@
 
 	const { meta, nextPlayStates, endStates, nCounts } = data;
 
-	let currentNextPlayStates = $derived.by(() => nextPlayStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)]);
+	const currentNextPlayStates = $derived.by(() => nextPlayStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)]);
 
-	let currentEndStates = $derived.by(() => endStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)]);
+	const currentEndStates = $derived.by(() => endStates[getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum)]);
 
-	let nCount = $derived.by(() => {
+	const nCount = $derived.by(() => {
 		const key = getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum);
 		return nCounts[key] || 0;
 	});
 
 	// Variable to help track if using closest state instead of direct state
-	let currentlyDisplaying = $derived.by(() => getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum));
+	const currentlyDisplaying = $derived.by(() => getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum));
 </script>
 
 <div class="flex min-h-screen flex-col">
