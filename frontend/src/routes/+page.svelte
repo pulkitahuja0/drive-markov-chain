@@ -3,13 +3,30 @@
 	import { createKey, downToText, getKey, stateMatcher } from '$lib/helpers.js';
 
 	// Use string representations for inputs to remove leading zeroes
-	let yardsToGo = $state('10');
-	let yardsFromEndZone = $state('75');
+	let yardsToGoRaw = $state('10');
+	let yardsFromEndZoneRaw = $state('75');
 
 	let down = $state(1);
 	// Number derivations for calculations and lookup
-	let yardsToGoNum = $derived.by(() => +yardsToGo);
-	let yardsFromEndZoneNum = $derived.by(() => +yardsFromEndZone);
+	let yardsToGoNum = $derived.by(() => +yardsToGoRaw);
+	let yardsFromEndZoneNum = $derived.by(() => +yardsFromEndZoneRaw);
+
+	const values = {
+		get yardsToGo() {
+			return `${clamp(yardsToGoNum)}`;
+		},
+		set yardsToGo(val: string) {
+			yardsToGoRaw = val;
+		},
+		get yardsFromEndZone() {
+			return `${clamp(yardsFromEndZoneNum)}`;
+		},
+		set yardsFromEndZone(val: string) {
+			yardsFromEndZoneRaw = val;
+		}
+	}
+
+	const clamp = (n: number) => Math.min(99, Math.max(0, isNaN(n) ? 0 : n));
 
 	let { data } = $props();
 
@@ -26,14 +43,6 @@
 
 	// Variable to help track if using closest state instead of direct state
 	let currentlyDisplaying = $derived.by(() => getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum));
-
-	$effect(() => {
-		yardsToGo = `${Math.min(99, Math.max(0, isNaN(yardsToGoNum) ? 0 : yardsToGoNum))}`;
-	});
-
-	$effect(() => {
-		yardsFromEndZone = `${Math.min(99, Math.max(0, isNaN(yardsFromEndZoneNum) ? 0 : yardsFromEndZoneNum))}`;
-	});
 </script>
 
 <div class="flex min-h-screen flex-col">
@@ -57,7 +66,7 @@
 							<!-- TODO: check if data will have & inches as 0 or 1 yards -->
 							<!-- TODO: change 0EXX or X-XX number-like values as 0 -->
 							<input
-								bind:value={yardsToGo}
+								bind:value={values.yardsToGo}
 								defaultValue={10}
 								step={1}
 								min={0}
@@ -67,7 +76,7 @@
 								aria-label="Yards from first down/goal"
 							/>
 							<input
-								bind:value={yardsFromEndZone}
+								bind:value={values.yardsFromEndZone}
 								defaultValue={75}
 								type="number"
 								min={0}
