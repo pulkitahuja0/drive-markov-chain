@@ -4,6 +4,7 @@
 	let { label, data, n } = $props();
 
 	// Slices the top 10 next states by probability to display
+	// TODO: show more than 10 states if screen space is available
 	let top10 = $derived.by(() => {
 		let a: [string, number][] = Object.keys(data).map((key) => [key, data[key]]); // [state, prob][]
 		return a.sort((x, y) => y[1] - x[1]).slice(0, 10); // Top 10 by probability
