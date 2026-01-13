@@ -35,9 +35,8 @@
 		<ul>
 			{#each top10 as item}
 				<li>
-					<span class={isEnd(item[0]) ? 'font-bold' : ''}>{keyToLabel(item[0])}:</span> {Math.round(
-						item[1] * 1000
-					) / 10}%
+					<span class={isEnd(item[0]) ? 'font-bold' : ''}>{keyToLabel(item[0])}:</span>
+					{Math.round(item[1] * 1000) / 10}%
 				</li>
 			{/each}
 		</ul>
