@@ -10,3 +10,4 @@ bun.lockb
 .svelte-kit
 
 build
+.vercel
