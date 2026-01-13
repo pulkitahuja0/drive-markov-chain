@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { keyToLabel } from '$lib/helpers';
 
-	let { label, data, n } = $props();
+	let { label, data, n = undefined } = $props();
 
 	// Slices the top 10 next states by probability to display
 	// TODO: show more than 10 states if screen space is available
@@ -25,7 +25,13 @@
 
 <div class="self-start border-2 border-black">
 	<div class="m-3">
-		<div class="text-lg">{label} (<i>N</i> = {n}):</div>
+		<div class="text-lg">
+			{#if n !== undefined}
+				{label} (<i>N</i> = {n}):
+			{:else}
+				{label}:
+			{/if}
+		</div>
 		<ul>
 			{#each top10 as item}
 				<li>

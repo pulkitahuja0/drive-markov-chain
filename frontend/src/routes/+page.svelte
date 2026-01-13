@@ -92,7 +92,7 @@
 						data={currentNextPlayStates}
 						n={nCount}
 					/>
-					<DataBox label={'End of drive probabilities'} data={currentEndStates} n={nCount} />
+					<DataBox label={'End of drive probabilities'} data={currentEndStates} />
 				</div>
 			</div>
 		{/if}
