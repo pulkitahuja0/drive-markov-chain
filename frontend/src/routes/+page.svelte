@@ -1,6 +1,6 @@
 <script lang="ts">
 	import DataBox from '$lib/components/DataBox.svelte';
-	import { createKey, downToText, getKey } from '$lib/helpers.js';
+	import { createKey, downToText, getKey, stateMatcher } from '$lib/helpers.js';
 
 	const clamp = (n: number) => Math.min(99, Math.max(0, isNaN(n) ? 0 : n));
 
@@ -44,6 +44,13 @@
 	const currentEndStates = $derived(endStates[currKey]);
 
 	const nCount = $derived(nCounts[currKey] || 0);
+
+	const selectState = (key: string) => {
+		const [newDown, newYardsToGo, newYardline] = stateMatcher(key);
+		down = newDown;
+		values.yardsToGo = `${newYardsToGo}`;
+		values.yardsFromEndZone = `${newYardline}`;
+	};
 </script>
 
 <div class="flex min-h-screen flex-col">
@@ -91,6 +98,7 @@
 						label={'Next play/position probabilities'}
 						data={currentNextPlayStates}
 						n={nCount}
+						onSelectState={selectState}
 					/>
 					<DataBox label={'End of drive probabilities'} data={currentEndStates} />
 				</div>
