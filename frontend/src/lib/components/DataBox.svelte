@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { keyToLabel } from '$lib/helpers';
 
-	let { label, data, n = undefined } = $props();
+	let { label, data, n = undefined, onSelectState = undefined } = $props();
 
 	// Slices the top 10 next states by probability to display
 	// TODO: show more than 10 states if screen space is available
@@ -34,9 +34,21 @@
 		</div>
 		<ul>
 			{#each top10 as item}
+				{@const clickable = onSelectState && !isEnd(item[0])}
 				<li>
-					<span class={isEnd(item[0]) ? 'font-bold' : ''}>{keyToLabel(item[0])}:</span>
-					{Math.round(item[1] * 1000) / 10}%
+					{#if clickable}
+						<button
+							type="button"
+							class="w-full cursor-pointer text-left hover:bg-gray-100 hover:underline"
+							onclick={() => onSelectState(item[0])}
+						>
+							<span>{keyToLabel(item[0])}:</span>
+							{Math.round(item[1] * 1000) / 10}%
+						</button>
+					{:else}
+						<span class={isEnd(item[0]) ? 'font-bold' : ''}>{keyToLabel(item[0])}:</span>
+						{Math.round(item[1] * 1000) / 10}%
+					{/if}
 				</li>
 			{/each}
 		</ul>
