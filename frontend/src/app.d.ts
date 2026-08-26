@@ -5,7 +5,11 @@ declare global {
 		// interface Error {}
 		// interface Locals {}
 		// interface PageData {}
-		// interface PageState {}
+		interface PageState {
+			down?: number;
+			yardsToGo?: string;
+			yardsFromEndZone?: string;
+		}
 		// interface Platform {}
 	}
 }
