@@ -53,6 +53,24 @@
 	};
 </script>
 
+<svelte:head>
+	<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "WebSite",
+			"name": "NFL Drives",
+			"description": "An interactive tool for analyzing football drive probabilities using Markov chains.",
+			"url": "https://drives.ahujapulkit.com",
+			"author": {
+				"@type": "Person",
+				"name": "Pulkit Ahuja",
+				"gender": "Male",
+				"url": "https://ahujapulkit.com"
+			}
+		}
+	</script>
+</svelte:head>
+
 <div class="flex min-h-screen flex-col">
 	<div class="grow">
 		{#if nextPlayStates && endStates}
