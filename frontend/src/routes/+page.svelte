@@ -1,30 +1,50 @@
 <script lang="ts">
+	import { pushState, replaceState } from '$app/navigation';
+	import { page } from '$app/state';
 	import DataBox from '$lib/components/DataBox.svelte';
 	import { createKey, downToText, getKey, stateMatcher } from '$lib/helpers.js';
 
 	const clamp = (n: number) => Math.min(99, Math.max(0, isNaN(n) ? 0 : n));
 
-	// Use string representations for inputs to remove leading zeroes
-	let yardsToGoRaw = $state('10');
-	let yardsFromEndZoneRaw = $state('75');
+	const DEFAULT_PAGE_STATE: Required<App.PageState> = {
+		down: 1,
+		yardsToGo: '10',
+		yardsFromEndZone: '75'
+	};
 
-	let down = $state(1);
+	const currState = $derived({ ...DEFAULT_PAGE_STATE, ...page.state });
+
 	// Number derivations for calculations and lookup
-	const yardsToGoNum = $derived(+yardsToGoRaw);
-	const yardsFromEndZoneNum = $derived(+yardsFromEndZoneRaw);
+	const yardsToGoNum = $derived(+currState.yardsToGo);
+	const yardsFromEndZoneNum = $derived(+currState.yardsFromEndZone);
+
+	const updateState = (partial: App.PageState, { push = false } = {}) => {
+		const next = { ...currState, ...partial };
+		if (push) {
+			pushState('', next);
+		} else {
+			replaceState('', next);
+		}
+	};
 
 	const values = {
+		get down() {
+			return currState.down;
+		},
+		set down(val: number) {
+			updateState({ down: val });
+		},
 		get yardsToGo() {
 			return `${clamp(yardsToGoNum)}`;
 		},
 		set yardsToGo(val: string) {
-			yardsToGoRaw = val;
+			updateState({ yardsToGo: val });
 		},
 		get yardsFromEndZone() {
 			return `${clamp(yardsFromEndZoneNum)}`;
 		},
 		set yardsFromEndZone(val: string) {
-			yardsFromEndZoneRaw = val;
+			updateState({ yardsFromEndZone: val });
 		}
 	};
 
@@ -37,7 +57,7 @@
 		key: currKey,
 		yardsToGo: currYardsToGo,
 		yardline: currYardsFromEndZone
-	} = $derived(getKey(nextPlayStates, down, yardsToGoNum, yardsFromEndZoneNum));
+	} = $derived(getKey(nextPlayStates, currState.down, yardsToGoNum, yardsFromEndZoneNum));
 
 	const currentNextPlayStates = $derived(nextPlayStates[currKey]);
 
@@ -47,9 +67,10 @@
 
 	const selectState = (key: string) => {
 		const [newDown, newYardsToGo, newYardline] = stateMatcher(key);
-		down = newDown;
-		values.yardsToGo = `${newYardsToGo}`;
-		values.yardsFromEndZone = `${newYardline}`;
+		updateState(
+			{ down: newDown, yardsToGo: `${newYardsToGo}`, yardsFromEndZone: `${newYardline}` },
+			{ push: true }
+		);
 	};
 </script>
 
@@ -79,7 +100,7 @@
 					<div class="self-start border-2 border-black">
 						<div class="m-3">
 							<select
-								bind:value={down}
+								bind:value={values.down}
 								class="rounded-lg border border-gray-400 bg-gray-50 p-1 focus:border-gray-400"
 								aria-label="Down"
 							>
@@ -123,9 +144,9 @@
 			</div>
 		{/if}
 
-		{#if currKey !== createKey(down, yardsToGoNum, yardsFromEndZoneNum)}
+		{#if currKey !== createKey(currState.down, yardsToGoNum, yardsFromEndZoneNum)}
 			<div class="m-6 text-center text-lg text-red-500">
-				Displaying {downToText(down)} & {currYardsToGo}
+				Displaying {downToText(currState.down)} & {currYardsToGo}
 				{currYardsFromEndZone} yards from the end zone
 			</div>
 		{/if}
